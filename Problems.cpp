@@ -54,6 +54,44 @@ vector<int> maxMinWindow(vector<int> a, int n) {
         
         result[length] = max(result[length] , a[i]);
     }
+    
+//     median in a stream
+    
+    
+#include "bits/stdc++.h"
+vector<int> findMedian(vector<int> &arr, int n){
+	
+	vector<int> ans;
+	priority_queue<int> left;
+	priority_queue<int, vector<int> , greater<int>> right;
+
+	for(int i=0; i<n;i++){
+		if(!left.empty() and left.top() > arr[i]){
+			left.push(arr[i]);
+			if(left.size() > right.size()+1) {
+				right.push(left.top());
+				left.pop();
+			}
+		}
+		else{
+			right.push(arr[i]);
+			if(right.size() > left.size()+1){
+				left.push(right.top());
+				right.pop();
+			}
+		}
+
+		if((i+1)&1){
+			ans.push_back((left.size() > right.size()) ? left.top() : right.top());
+		}
+		else{
+			ans.push_back((left.top()+right.top())/2);
+		}
+	}
+
+	return ans;
+}
+
 
     for(int i=n-1;i>=1;i--){
         result[i] = max(result[i], result[i+1]);

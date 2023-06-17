@@ -90,8 +90,8 @@ vector<int> findMedian(vector<int> &arr, int n){
 	}
 
 	return ans;
+	
 }
-
 
     for(int i=n-1;i>=1;i--){
         result[i] = max(result[i], result[i+1]);
@@ -100,3 +100,23 @@ vector<int> findMedian(vector<int> &arr, int n){
     result.erase(result.begin());
     return result;
 }
+
+
+
+//  rod cutting problem 
+
+int cutRod(vector<int> &price, int n)
+{
+
+	vector<int> dp(n+1,0);
+	for(int i=1; i<=n;i++){
+		int temp = 0;
+		for(int j=0; j<i;j++){
+			temp = max(temp, price[j] + dp[i-j-1]);
+		}
+		dp[i] = temp;
+	}
+	return dp[n];
+}
+
+

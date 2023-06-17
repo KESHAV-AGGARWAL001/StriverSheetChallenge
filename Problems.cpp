@@ -164,3 +164,29 @@ string cycleDetection (vector<vector<int>>& edges, int n, int m)
     }
     return flag == 1 ? "Yes" : "No";
 }
+
+
+// path in a tree
+#include <bits/stdc++.h> 
+
+void dfs(TreeNode<int> *root, vector<int> &ans, int x , vector<int> &result){
+	if(!root) return;
+	if(root->data == x){
+		for(auto it: ans) cout<<it<<" ";
+		cout<<x;
+		return;
+	}
+	ans.push_back(root->data);
+	dfs(root->left , ans, x, result);
+	dfs(root->right, ans , x, result);
+	ans.pop_back();
+}
+
+vector<int> pathInATree(TreeNode<int> *root, int x)
+{
+    // Write your code here.
+	vector<int>ans, result;
+	dfs(root, ans , x , result);
+	return result;
+}
+

@@ -120,3 +120,47 @@ int cutRod(vector<int> &price, int n)
 }
 
 
+//  cycle detection in undirected graph 
+#include "bits/stdc++.h"
+
+void dfs(int x, int p, vector<int>& col, vector<vector<int>>& v , bool &flag)
+{
+    col[x] = 1;
+    for (auto itr : v[x])
+    {
+        if (itr == p)
+        {
+            continue;
+        }
+        if (col[itr] == 1)
+        {
+            flag = 1;
+        }
+        if (col[itr] == -1)
+        {
+            dfs(itr, x, col, v,flag);
+        }
+    }
+    col[x] = 2;
+}
+
+
+string cycleDetection (vector<vector<int>>& edges, int n, int m)
+{
+	vector<vector<int>> adj(n+1);
+    for(auto it : edges){
+        int u = it[0];
+        int v = it[1];
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    } 
+    vector<int>col(n + 1, -1);
+	bool flag = false;
+    for (int i = 1; i <= n; i++)
+    {
+        if (col[i] == -1) {
+            dfs(i, 0, col, adj, flag);
+        }
+    }
+    return flag == 1 ? "Yes" : "No";
+}

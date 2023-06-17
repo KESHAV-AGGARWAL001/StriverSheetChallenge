@@ -169,7 +169,7 @@ string cycleDetection (vector<vector<int>>& edges, int n, int m)
 // path in a tree
 #include <bits/stdc++.h> 
 
-void dfs(TreeNode<int> *root, vector<int> &ans, int x , vector<int> &result){
+void dfs(TreeNode<int> *root, vector<int> &ans, int x){
 	if(!root) return;
 	if(root->data == x){
 		for(auto it: ans) cout<<it<<" ";
@@ -177,16 +177,14 @@ void dfs(TreeNode<int> *root, vector<int> &ans, int x , vector<int> &result){
 		return;
 	}
 	ans.push_back(root->data);
-	dfs(root->left , ans, x, result);
-	dfs(root->right, ans , x, result);
+	dfs(root->left , ans, x);
+	dfs(root->right, ans , x);
 	ans.pop_back();
 }
 
 vector<int> pathInATree(TreeNode<int> *root, int x)
 {
-    // Write your code here.
-	vector<int>ans, result;
-	dfs(root, ans , x , result);
-	return result;
+	vector<int>ans;
+	dfs(root, ans , x );
+	return {};
 }
-

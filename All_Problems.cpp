@@ -1300,10 +1300,419 @@ vector<vector<int>> pwset(vector<int> nums)
 }
 
 
+//  valid parenthesis
+bool isValidParenthesis(string s)
+{
+    stack<char> ans;
+        bool flag = true;
+        if(s.length()&1){
+            return false;
+        }
+        for(int i=0; i<s.length() ;i++){
+            if(s[i] == '(' || s[i] == '['||s[i] == '{'){
+                ans.push(s[i]);
+            }
+            else if(ans.empty()){
+                return false;
+            }
+            else if(ans.top() == '(' && s[i] == ')'){
+                ans.pop();
+            }
+            else if(ans.top() == '[' && s[i] == ']'){
+                ans.pop();
+            }
+            else if(ans.top() == '{' && s[i] == '}'){
+                ans.pop();
+            }
+            else{
+                return false;
+            }
+        }
+        return ans.empty();
+}
+
+// next greater element
+
+#include <bits/stdc++.h> 
+
+vector<int> nextGreater(vector<int> &arr, int n) {
+    stack<pair<int,int>> s;
+    vector<int> ans(n);
+    s.push({arr[0] , 0});
+
+    for (int i = 1; i < n; i++) {
+
+        if (s.empty()) {
+            s.push({arr[i] , i});
+            continue;
+        }
+
+        while (s.empty() == false && s.top().first < arr[i]) {
+            ans[s.top().second] = arr[i];
+            s.pop();
+        }
+
+        s.push({arr[i] , i});
+    }
+
+    while (s.empty() == false) {
+        ans[s.top().second]  = -1;
+        s.pop();
+    }
+    return ans;
+}
+
+// sort a stack
+#include <bits/stdc++.h> 
+void sortStack(stack<int> &s)
+{
+	stack<int> temp;
+
+	while(!s.empty()){
+
+		int value = s.top();
+		s.pop();
+
+		while(!temp.empty() and temp.top() < value){
+			s.push(temp.top());
+			temp.pop();
+		}
+
+		temp.push(value);
+	}
+
+	while(temp.empty() == false){
+		s.push(temp.top());
+		temp.pop();
+	}
+}
+
+// next smaller element 
+#include "bits/stdc++.h"
+
+vector<int> nextSmallerElement(vector<int> &arr, int n)
+{
+    stack<pair<int,int>> s;
+    vector<int> ans(n);
+    s.push({arr[0] , 0});
+
+    for (int i = 1; i < n; i++) {
+
+        if (s.empty()) {
+            s.push({arr[i] , i});
+            continue;
+        }
+
+        while (s.empty() == false && s.top().first > arr[i]) {
+            ans[s.top().second] = arr[i];
+            s.pop();
+        }
+
+        s.push({arr[i] , i});
+    }
+
+    while (s.empty() == false) {
+        ans[s.top().second]  = -1;
+        s.pop();
+    }
+    return ans;
+}
 
 
+// lru cache
+#include "bits/stdc++.h"
+
+class LRUCache
+{
+public:
+    unordered_map<int, int>m;
+    unordered_map<int, int>visited;
+    deque<int>q;
+    int count = 0;
+    int capacity = 0;
+    LRUCache(int capacity)
+    {
+        // Write your code here
+        this->capacity = capacity;
+    }
+
+    int get(int key)
+    {
+        // Write your code here
+        if(!m.count(key) || m[key] == -1) return -1;
+        q.push_back(key);
+        visited[key]++;
+        return m[key];
+    }
+
+    void put(int key, int value)
+    {
+        // Write your code here
+        if(!m.count(key)|| m[key] == -1) count++;
+        else visited[key]++;
+        if(count > capacity){
+            while(visited[q.front()]) visited[q.front()]--, q.pop_front();
+            m[q.front()] = -1;
+            q.pop_front();
+            count--;
+        }
+        q.push_back(key);
+        m[key] = value;
+    }
+};
 
 
+//  largest rectangle 
+ #include "bits/stdc++.h"
+ 
+ int largestRectangle(vector < int > & heights) {
+    stack<int>stk;
+        int i=0;
+        int n=heights.size();
+        int maxArea = 0;
+        while(i < n)
+            {   
+
+    if(stk.empty() or( heights[stk.top()] <= heights[i] ))
+            {
+                stk.push(i++);
+            }
+            else
+            {
+                int minBarIndex = stk.top();
+                stk.pop();
+                int width = i;
+                if(!stk.empty())  width = i - 1 - stk.top();
+                int area = heights[minBarIndex] * width;
+                maxArea = max(maxArea , area);
+            }
+        }
+
+        while(!stk.empty())
+        {
+            int minBarIndex = stk.top();
+            stk.pop();
+            int width = i;
+            if(!stk.empty())  width = i - 1 - stk.top();
+            int area = heights[minBarIndex] * width;
+            maxArea = max(maxArea , area);
+        }
+        return maxArea;
+ }
+
+//  sliding window maximum 
+#include <bits/stdc++.h> 
+vector<int> slidingWindowMaximum(vector<int> &nums, int &k)
+{
+    vector<int> ans;
+    deque<int> dq;
+    int i;
+    for( i=0; i<k;i++){
+        while(dq.size() && nums[i] >= nums[dq.back()]) dq.pop_back();
+        dq.push_back(i);
+    }
+    for( ; i<nums.size();i++){
+        ans.push_back(nums[dq.front()]);
+        while(dq.size() && dq.front() <= i-k) dq.pop_front();
+        while(dq.size() && nums[i] >= nums[dq.back()]) dq.pop_back();
+        dq.push_back(i);
+    }
+    ans.push_back(nums[dq.front()]);
+    return ans;
+}
+
+//  min stack
+#include <bits/stdc++.h> 
+// Implement class for minStack.
+class minStack
+{
+	// Write your code here.
+	
+	public:
+		 stack<pair<int, int> > s;
+		// Constructor
+		minStack() 
+		{ 
+			// Write your code here.
+		}
+		
+		// Function to add another element equal to num at the top of stack.
+		void push(int element)
+		{
+			int new_min = s.empty()? element : min(element, s.top().second); 
+        	s.push({ element, new_min });
+		}
+		
+		// Function to remove the top element of the stack.
+		int pop()
+		{
+			int popped;
+        	if (!s.empty()) {
+				popped = s.top().first;
+				s.pop();
+				return popped;
+			}
+			return -1;
+		}
+		
+		// Function to return the top element of stack if it is present. Otherwise return -1.
+		int top()
+		{
+
+			if(s.size() == 0) return -1;
+			return s.top().first;
+			
+		}
+		
+		// Function to return minimum element of stack if it is present. Otherwise return -1.
+		int getMin()
+		{
+			if(s.size() == 0) return -1;
+			int min_elem = s.top().second;
+        	return min_elem;
+		}
+};
+
+//  rotting oranges
+ #include "bits/stdc++.h"
+
+int minTimeToRot(vector<vector<int>>& grid, int n, int m)
+{
+    vector<vector<bool>> visited(n,vector<bool> (m,false));
+    queue<pair<pair<int,int> , int>> q;
+    for(int i=0; i<n;i++){
+        for(int j=0; j<m;j++){
+        if(grid[i][j] == 2){
+            visited[i][j] = true;
+            q.push({{i,j},0});
+        }
+        }
+    }
+    int min_time = 0;
+    while(q.size()){
+        int r = q.front().first.first;
+        int c = q.front().first.second;
+        int time = q.front().second;
+        min_time = time;
+        q.pop();
+        int row[] = {-1,1,0,0};
+        int col[] = {0,0,-1,1};
+
+        for(int i=0; i<4;i++){
+        int ro = r + row[i];
+        int co = c + col[i];
+        if(ro<n and ro>=0 and co>=0 and co<m ){
+            if(!visited[ro][co] and grid[ro][co] == 1){
+            grid[ro][co] = 2;
+            visited[ro][co] = true;
+            q.push({{ro,co},time+1});
+            }
+        }
+        }
+    }
+    for(int i=0; i<n;i++){
+        for(int j=0; j<m;j++){
+        if(grid[i][j] == 1) return -1;
+        }
+    }
+    return min_time; 
+}
+
+//  maximum of minimum of all size 
+
+#include <bits/stdc++.h> 
+vector<int> maxMinWindow(vector<int> a, int n) {
+   
+   stack<int> s;
+   vector<int> prev_min(n+1);   
+   vector<int> next_min(n+1);
+
+   for(int i=0; i<n;i++) prev_min[i] = -1 , next_min[i] = n;
+    
+    for(int i=0; i<n;i++){
+        while(!s.empty() and a[s.top()] >= a[i]){
+            s.pop();
+        }
+        if(!s.empty()) prev_min[i] = s.top();
+        s.push(i);
+    }
+
+    while(s.size()) s.pop();
+    
+    for(int i=n-1;i>=0;i--){
+         while(!s.empty() and a[s.top()] >= a[i]){
+            s.pop();
+        }
+        if(!s.empty()) next_min[i] = s.top();
+        s.push(i);
+    }
+
+    while(s.size()) s.pop();
+    
+    vector<int> result (n+1, INT_MIN);
+
+    for(int i=0; i<n;i++){
+        int length = next_min[i] - prev_min[i] - 1;
+        
+        result[length] = max(result[length] , a[i]);
+    }
+
+    for(int i=n-1;i>=1;i--){
+        result[i] = max(result[i], result[i+1]);
+    }
+    
+    result.erase(result.begin());
+    return result;
+}
+
+//  reverse words in a string 
+string reverseString(string &str){
+	vector<string> ans;
+	string temp = "";
+	for(int i=0; i<str.length();i++){
+		if(str[i] == ' '){
+			ans.push_back(temp);
+			temp = "";
+			continue;
+		}
+		temp += str[i];
+	}
+	ans.push_back(temp);
+	reverse(ans.begin() , ans.end());
+	string result = "";
+	for(auto it : ans){
+		if(it.length()) {
+			result += it + " ";
+		}
+	}
+	result.pop_back();
+	return result;
+}
+
+// roman numerals to integers 
+#include <bits/stdc++.h> 
+int romanToInt(string str) {
+    map<char, int> a ;
+        a.insert({'I' , 1});
+        a.insert({'V' , 5});
+        a.insert({'X' , 10});
+        a.insert({'L' , 50});
+        a.insert({'C' , 100});
+        a.insert({'D' , 500});
+        a.insert({'M' , 1000});
+        int sum = 0;
+    for (int i = 0; i < str.length(); i++) 
+    {
+        if (a[str[i]] < a[str[i + 1]])
+        {
+            sum+=a[str[i+1]]-a[str[i]];
+            i++;
+            continue;
+        }
+        sum += a[str[i]];
+    }
+    return sum;
+}
 
 
 

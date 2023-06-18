@@ -1714,6 +1714,61 @@ int romanToInt(string str) {
     return sum;
 }
 
+//  implement trie 
+#include "bits/stdc++.h"
+struct Node{
+    Node* child[26];
+    bool isEnd;
+
+    Node(){
+        memset(child , 0, sizeof child);
+        isEnd = false;
+    }
+};
+
+class Trie {
+    Node* root;
+public:
+
+    Trie() {
+        root = new Node();
+    }
+
+    /** Inserts a word into the trie. */
+    void insert(string word) {
+        Node* temp = root;
+        for(auto it : word){
+            int index = it-'a';
+            if(temp->child[index] == NULL){
+                temp->child[index] = new Node();
+            }
+            temp = temp->child[index];
+        }
+        temp->isEnd = true;
+    }
+
+    /** Returns if the word is in the trie. */
+    bool search(string word) {
+        Node* temp = root;
+        for(auto it : word){
+            int index = it-'a';
+            if(temp->child[index] == NULL) return false;
+            temp = temp->child[index];
+        }
+        return temp->isEnd;
+    }
+
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    bool startsWith(string prefix) {
+        Node* temp = root;
+        for(auto it : prefix){
+            int index = it-'a';
+            if(temp->child[index] == NULL) return false;
+            temp = temp->child[index];
+        }
+        return true;
+    }
+};
 
 
 

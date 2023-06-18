@@ -1770,7 +1770,77 @@ public:
     }
 };
 
+//  implement trie 2
+#include <bits/stdc++.h> 
 
+struct Node{
+    Node* child[26];
+    int countWords;
+    int isEnd;
+
+    Node(){
+        memset(child , 0 , sizeof child);
+        countWords = 0;
+        isEnd = 0;
+    }
+};
+class Trie{
+    private :
+        Node* root;
+    public:
+
+    Trie(){
+        root = new Node();
+    }
+
+    void insert(string &word){
+        Node* temp = root;
+        for(auto it : word){
+            int index = it-'a';
+            if(temp->child[index] == NULL){
+                temp->child[index] = new Node();
+            }
+            temp->countWords++;
+            temp = temp->child[index];
+        }
+        temp->isEnd++;
+        temp->countWords++;
+    }
+
+    int countWordsEqualTo(string &word){
+        Node* temp = root;
+        for(auto it : word){
+            int index = it-'a';
+            if(temp->child[index] == NULL) return 0;
+            temp = temp->child[index];
+        }
+        return temp->isEnd;
+    }
+
+    int countWordsStartingWith(string &word){
+        Node* temp = root;
+        for(auto it : word){
+            int index = it-'a';
+            if(temp->child[index] == NULL) return 0;
+            temp = temp->child[index];
+        }
+        return temp->countWords;
+    }
+
+    void erase(string &word){
+        Node* temp = root;
+        for(auto it : word){
+            int index = it-'a';
+            temp->countWords--;
+            temp = temp->child[index];
+        }
+        temp->countWords--;
+        temp->isEnd--;
+    }
+};
+
+
+// 
 
 
 

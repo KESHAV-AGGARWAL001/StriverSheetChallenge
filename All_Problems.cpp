@@ -2051,4 +2051,1129 @@ TreeNode<int> * invertBinaryTree(TreeNode<int> *root, TreeNode<int> *leaf)
 }
 
 
+//  implement atoi function 
+#include <bits/stdc++.h> 
+int atoi(string str) {
+    int len = str.length();
+    string res = "";
+    for(int i=1; i<len;i++){
+        if(str[i] >= '0' and str[i]<='9'){
+            res += str[i];
+        }
+    }
+    if((str[0] == '-' or ( str[0] >= '0' and str[0] <= '9') )and res.length() ){
+        res = str[0] + res;
+    }
+    return res.length() > 0 ? stoi(res) : 0;
+}
+
+// longest common prefix 
+
+#include "bits/stdc++.h"
+
+string longestCommonPrefix(vector<string> &strs, int n)
+{
+    int len = strs[0].length();
+    string s = strs[0];
+    for(int i=1;i<n;i++){
+        if(strs[i].length()<len){
+            len = strs[i].length();
+            s = strs[i];
+        }
+    }
+    string a = "";
+    for(int i=0;i<len;i++){
+        bool flag =0 ;
+        for(int j=0; j<n ; j++){
+            if(strs[j][i] == s[i]){
+                flag = 1;
+            }
+            else if(strs[j][i] != s[i]){
+                flag = 0;
+                break;
+            }
+        }
+        if(flag){
+            a += s[i];
+        }
+        else{
+            break;
+        }
+    }
+    return a;
+}
+
+
+
+// search pattern 
+vector<int> stringMatch(string &str, string &pat) {
+    vector<int> index;
+    if(str == pat) return {0};
+    if(str.length() < pat.length()) return index;
+    for(int i=0 ; i<=str.length() - pat.length() ; i++){
+        if(str[i] == pat[0] and str.substr(i,pat.length()) == pat) {
+            index.push_back(i);
+        }
+    }
+    return index;
+}
+
+
+// z - algorithm,
+#include "bits/stdc++.h"
+
+int zAlgorithm(string s, string p, int n, int m)
+{
+	int count = 0;
+	for(int i=0;i<=s.length() - p.length() ;i++){
+		if(s[i] == p[0] and s.substr(i,p.length()) == p){
+			count++;
+		}
+	}
+	return count;
+}
+
+// find pattern 
+
+#include <bits/stdc++.h> 
+bool findPattern(string p, string s)
+{
+    return (s.find(p) != string::npos);
+}
+
+//  check permutations 
+#include <bits/stdc++.h> 
+bool areAnagram(string &str1, string &str2){
+    int count[26] = {0};
+    if(str1.length() != str2.length()) return false;
+    for(auto it : str1){
+        count[it-'a']++;
+    }
+    for(auto it : str2){
+        count[it-'a']--;
+    }
+    for(int i=0; i<26;i++){
+        if(count[i] != 0) return false;
+    }
+    return true;
+}
+
+//  count and say 
+#include <bits/stdc++.h> 
+string writeAsYouSpeak(int n) 
+{
+	
+	 string s = "1";
+	if(n==1) return s;
+	n--;
+	while(n--){
+		string temp = "";
+		int freq = 1;
+		char ch = s[0];
+		for(int i=1; i<s.length() ;i++){
+			if(ch == s[i]){
+				freq++;
+			}
+			else {
+				temp += to_string(freq);
+				temp += ch;
+				ch = s[i];
+				freq = 1;
+			}
+		}
+		temp += to_string(freq);
+		temp += ch;
+		s = temp;
+	}
+	return s;
+}
+
+// inorder traversal 
+#include <bits/stdc++.h> 
+
+void inorder(TreeNode* root, vector<int>&v){
+    if(root==nullptr) return ;
+    inorder(root->left, v);
+    v.push_back(root->data);
+    inorder(root->right,v);
+}
+vector<int> getInOrderTraversal(TreeNode *root)
+{
+    vector<int> v;
+    inorder(root , v);
+    return v;
+}
+
+//  preorder traversal 
+#include <bits/stdc++.h> 
+/*
+    Following is Binary Tree Node structure:
+    class TreeNode
+    {
+    public:
+        int data;
+        TreeNode *left, *right;
+        TreeNode() : data(0), left(NULL), right(NULL) {}
+        TreeNode(int x) : data(x), left(NULL), right(NULL) {}
+        TreeNode(int x, TreeNode *left, TreeNode *right) : data(x), left(left), right(right) {}
+    };
+*/
+
+void preorder(TreeNode* root, vector<int>&v){
+    if(root==nullptr) return ;
+    v.push_back(root->data);
+    preorder(root->left, v);
+    preorder(root->right,v);
+} 
+
+vector<int> getPreOrderTraversal(TreeNode *root)
+{
+    vector<int> ans;
+    preorder(root, ans);
+    return ans;
+}
+
+//  post order traversal '
+#include <bits/stdc++.h> 
+/*
+    Following is Binary Tree Node structure:
+    class TreeNode
+    {
+    public:
+        int data;
+        TreeNode *left, *right;
+        TreeNode() : data(0), left(NULL), right(NULL) {}
+        TreeNode(int x) : data(x), left(NULL), right(NULL) {}
+        TreeNode(int x, TreeNode *left, TreeNode *right) : data(x), left(left), right(right) {}
+    };
+*/
+
+void postorder(TreeNode* root, vector<int>&v){
+    if(root==nullptr) return ;
+    v.push_back(root->data);
+    postorder(root->right,v);
+    postorder(root->left, v);
+} 
+vector<int> getPostOrderTraversal(TreeNode *root)
+{
+    vector<int> ans;
+    postorder(root, ans);
+    reverse(ans.begin() , ans.end());
+    return ans;
+}
+
+//  left view of binary tree
+#include <bits/stdc++.h> 
+vector<int> getLeftView(TreeNode<int> *root)
+{
+    vector<int> ans;
+    queue<TreeNode<int>*>q;
+    q.push(root);
+    if(root==nullptr){
+        return ans;
+    }
+    while(1){
+        int size = q.size();
+        if(size==0){
+            return ans;
+        }
+        bool flag = true;
+        while(size--){
+            TreeNode<int>* temp = q.front();
+            if(flag) {
+                ans.push_back(temp->data);
+                flag = !flag;
+            }
+            q.pop();
+            if(temp->left!=NULL){
+                q.push(temp->left);
+            }
+            if(temp->right){
+                q.push(temp->right);
+            }
+        }
+    }
+    return ans;
+}
+
+//  binary tree traversal 
+#include <bits/stdc++.h> 
+/*************************************************************
+ 
+    Following is the Binary Tree node structure.
+
+    class BinaryTreeNode 
+    {
+    public : 
+        T data;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
+
+        BinaryTreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+*************************************************************/
+
+vector<int> bottomView(BinaryTreeNode<int> * root){
+
+    map<int,int > ans;
+    queue< pair<BinaryTreeNode<int>* , pair<int,int> > > todo;
+    todo.push({root ,  {0,0}});
+    while(!todo.empty()){
+        auto p = todo.front();
+        todo.pop();
+        BinaryTreeNode<int> * node = p.first;
+        int x = p.second.first;
+        int y = p.second.second;
+        ans[x] = node->data;
+        if(node->left) todo.push({node->left , {x-1 , y+1}});
+        if(node->right) todo.push({node->right , {x+1 , y+1}});
+    }
+    
+    vector<int> result;
+    for(auto it : ans){
+        result.push_back(it.second);
+    }
+    return result;
+}
+
+
+//  vertical order traversal 
+#include <bits/stdc++.h> 
+
+vector<int> verticalOrderTraversal(TreeNode<int> *root)
+{
+    map<int, vector<pair<int , int>> > nodes ;
+    queue<pair<TreeNode<int>* , pair<int,int>>> todo;
+    todo.push({root, {0,0}});
+    while(!todo.empty()){
+        auto p = todo.front();
+        todo.pop();
+        TreeNode<int>* node = p.first;
+        int x = p.second.first;
+        int y = p.second.second;
+        nodes[x].push_back({node->data , y});
+        if(node->left) todo.push({node->left , {x-1 , y+1}});
+        if(node->right) todo.push({node->right , {x+1 , y+1}});
+    }
+
+    vector<int> ans;
+    for(auto it:nodes){
+        vector<pair<int,int>>temp = it.second; 
+        for(auto m : temp) ans.push_back(m.first);
+    }
+    return ans;
+}
+
+//  Path existing in a tree#include <bits/stdc++.h> 
+
+void dfs(TreeNode<int> *root, vector<int> &ans, int x){
+	if(!root) return;
+	if(root->data == x){
+		for(auto it: ans) cout<<it<<" ";
+		cout<<x;
+		return;
+	}
+	ans.push_back(root->data);
+	dfs(root->left , ans, x);
+	dfs(root->right, ans , x);
+	ans.pop_back();
+}
+
+vector<int> pathInATree(TreeNode<int> *root, int x)
+{
+	vector<int>ans;
+	dfs(root, ans , x );
+	return {};
+}
+
+// Maximum width of a tree
+#include <bits/stdc++.h> 
+/************************************************************
+
+    Following is the TreeNode class structure
+
+    template <typename T>
+    class TreeNode {
+       public:
+        T val;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T val) {
+            this->val = val;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+************************************************************/
+
+int getMaxWidth(TreeNode<int> *root)
+{
+    int width = 0;
+    if(!root)return width;
+    queue<TreeNode<int>*>q;
+    q.push(root);
+    while(!q.empty()){
+        int sz=q.size();
+        width = max(width , sz);
+        while(sz--){
+            TreeNode<int> *f = q.front();
+            q.pop();
+            if(f->left)q.push(f->left);
+            if(f->right)q.push(f->right);
+        }
+    }
+    return width;
+}
+
+// Level order traversal
+#include <bits/stdc++.h> 
+/************************************************************
+
+    Following is the BinaryTreeNode class structure
+
+    template <typename T>
+    class BinaryTreeNode {
+       public:
+        T val;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
+
+        BinaryTreeNode(T val) {
+            this->val = val;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+************************************************************/
+vector<int> getLevelOrder(BinaryTreeNode<int> *root)
+{
+    vector<int> ans;
+    queue<BinaryTreeNode<int>*> pq;
+    if(!root) return ans;
+    pq.push(root);
+    while(true){
+        int size = pq.size();
+        if(size == 0) return ans;
+        while(size--){
+            BinaryTreeNode<int>* temp = pq.front();
+            pq.pop();
+            ans.push_back(temp->val);
+            if(temp->left) pq.push(temp->left);      
+            if(temp->right) pq.push(temp->right);
+        }
+    }
+}
+
+// Height of a tree
+#include <bits/stdc++.h> 
+int heightOfTheTree(vector<int>& inorder, vector<int>& levelOrder, int n){
+	queue<int>q1,q2;
+    q1.push(levelOrder[0]);
+    int k = 1,height = 0;
+    while(!q1.empty() || !q2.empty()){
+        if(!q1.empty()) height++;
+        while(!q1.empty()){
+            int val = q1.front();
+			int i = 0;
+            for( i = 0;i<n;++i){
+                if(inorder[i] == val) break;
+            }
+            if(i>0 && inorder[i-1] !=-1 && k<n)
+                q2.push(levelOrder[k++]);
+            if(i<n-1 && inorder[i+1] !=-1 && k<n) 
+                q2.push(levelOrder[k++]);
+            inorder[i] = -1;
+            q1.pop();
+        }
+        if(!q2.empty()) height++;
+        while(!q2.empty()){
+            int val = q2.front();
+			int i =0;
+            for(i = 0;i<n;++i){
+                if(inorder[i] == val) break;
+            }
+            if(i>0 && inorder[i-1] !=-1 && k<n)  
+                q1.push(levelOrder[k++]);
+            if(i<n-1 && inorder[i+1] !=-1 && k<n) 
+                q1.push(levelOrder[k++]);
+            inorder[i] = -1;
+            q2.pop();
+        }
+    }
+	return height-1;
+}
+
+// diameter of a tree
+/************************************************************
+
+    Following is the TreeNode class structure
+
+    template <typename T>
+    class TreeNode {
+       public:
+        T data;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T data) {
+            this->data = data;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+************************************************************/
+int height(TreeNode<int> * node, int &diameter){
+    if(!node){
+        return 0;
+    }
+    int lh=height(node->left,diameter);
+    int rh=height(node->right,diameter);
+    diameter=max(diameter,lh+rh);
+    return 1+ max(lh,rh);
+}
+int diameterOfBinaryTree(TreeNode<int> *root)
+{
+    int diameter = 0;
+    height(root, diameter);
+    return diameter;
+}
+
+
+// Is height balance binary tree 
+#include <bits/stdc++.h> 
+/*************************************************************
+ 
+    Following is the Binary Tree node structure
+
+    class BinaryTreeNode 
+    {
+    public : 
+        T data;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
+
+        BinaryTreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+*************************************************************/
+int height(BinaryTreeNode<int>* node , bool &result){
+    if(!node){
+        return 0;
+    }
+    int lh=height(node->left,result);
+    int rh=height(node->right,result);
+    result  = result & (abs(lh - rh) <= 1);
+    return max(lh,rh) + 1;
+}
+bool isBalancedBT(BinaryTreeNode<int> *root) {
+  bool result = true;
+  if (root == nullptr)
+    return true;
+  height(root, result);
+  return result;
+}
+
+//  lca of a binary tree 
+#include <bits/stdc++.h> 
+int lowestCommonAncestor(TreeNode<int> *root, int n1 ,int n2)
+{
+	if(!root) return -1;
+    if(root->data == n1 || root->data == n2) return root->data;
+    int lca1 = lowestCommonAncestor(root->left, n1, n2);
+    int lca2 = lowestCommonAncestor(root->right, n1, n2);
+    if(lca1 != -1 and lca2 != -1) return root->data;
+    if(lca1!=-1) return lca1;
+    return lca2;
+}
+
+//  Check identical trees
+#include <bits/stdc++.h> 
+bool identicalTrees(BinaryTreeNode<int>* root1, BinaryTreeNode<int>* root2) {
+    if(root1 == NULL and root2 == NULL) return true;
+    if((root1 != NULL and root2 == NULL ) or (root1 == NULL and root2 != NULL)) return false; 	
+    return  (root1->data == root2->data) and identicalTrees(root1->left, root2->left) and identicalTrees(root1->right , root2->right);
+}
+
+
+// binary tree zigzag traversal
+
+#include <bits/stdc++.h> 
+/*************************************************************
+
+    Following is the Binary Tree node structure
+
+    class BinaryTreeNode
+    {
+    public :
+        T data;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
+
+        BinaryTreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+*************************************************************/
+
+vector<int> zigZagTraversal(BinaryTreeNode<int> *root)
+{
+    vector<int> ans;
+    queue<BinaryTreeNode<int>*> q;
+    q.push(root);
+    bool flag = 1;
+    if (root == nullptr)
+        return ans;
+    while (1)
+    {
+        int size = q.size();
+        if (size == 0) return ans;
+        vector<int> data;
+        while (size > 0)
+        {
+            BinaryTreeNode<int> * temp = q.front();
+            data.push_back(temp->data);
+            q.pop();
+            if (temp->left) q.push(temp->left);
+            if (temp->right) q.push(temp->right);
+            size--;
+        }
+        flag = !flag;
+        if(flag) reverse(data.begin(), data.end());
+        for(auto it: data) ans.push_back(it);
+    }
+    return ans;
+}
+
+
+// Boundary traversal of a tree
+
+#include <bits/stdc++.h> 
+/************************************************************
+
+    Following is the Binary Tree node structure:
+    
+    template <typename T>
+    class TreeNode {
+        public :
+        T data;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+
+        ~TreeNode() {
+            if(left)
+                delete left;
+            if(right)
+                delete right;
+        }
+    };
+
+************************************************************/
+
+bool isLeafNode(TreeNode<int>* root){
+    return (!root->left and !root->right) ;
+}
+
+void LeftBoundary(TreeNode<int>* root, vector<int>&ans){
+    if(!root) return;
+    root = root->left;
+    while(root){
+    if(!isLeafNode(root)) ans.push_back(root->data);
+    if(root->left) root = root->left;
+    else root = root->right;
+    }
+}
+
+void RightBoundary(TreeNode<int>* root, vector<int>&ans){
+    if(!root) return;
+    root = root->right;
+    vector<int> vec;
+    while(root){
+        if(!isLeafNode(root)) vec.push_back(root->data);
+        if(root->right) root = root->right;
+        else root = root->left;
+    }
+    while(vec.size()){
+        ans.push_back(vec.back());
+        vec.pop_back();
+    }
+}
+
+void LeafNodes(TreeNode<int>* root , vector<int> &ans){
+    if(!root) return;
+    if(isLeafNode(root)){
+        ans.push_back(root->data); 
+    }
+    LeafNodes(root->left, ans);
+    LeafNodes(root->right, ans);
+}
+
+vector<int> traverseBoundary(TreeNode<int>* root){
+    vector<int> ans;
+    if(!root) return ans;
+    if(isLeafNode(root)){
+        return {root->data};
+    }
+    ans.push_back(root->data);
+    LeftBoundary(root, ans);
+    LeafNodes(root, ans);
+    RightBoundary(root, ans);
+    return ans;
+}
+
+// Maximum pattern between two leaf notes
+
+#include <bits/stdc++.h> 
+
+long long int max(long long int a , long long int b){
+    return (a>b) ? a :b;
+}
+
+long long int max(long long int a, long long int b , long long int c){
+    return (a>max(b,c) ) ? a : (b > max(a,c)) ? b : c;
+}
+long long int solve(TreeNode<int>* root,long long int &ans){
+    if(root == NULL)return 0;
+    long long int l = solve(root->left,ans);
+    long long int r = solve(root->right,ans);
+    ans = max(ans,root->val,root->val+max(l,r,l+r));
+    return max(root->val,root->val+max(l,r));
+}
+
+bool isLeafNode(TreeNode<int>* root){
+    return (root->left == nullptr and root->right == nullptr);
+}
+long long int findMaxSumPath(TreeNode<int> *root)
+{
+    if(!root) return -1;
+    if(root->left and root->right == nullptr) return -1;
+    else if(root->right and root->left == nullptr) return -1;
+    if(isLeafNode(root)) return -1;
+    long long int ans = 1e-8;
+    solve(root , ans);
+    return ans;
+}
+
+// construct binary tree from preorder and in order
+#include <bits/stdc++.h> 
+
+
+
+TreeNode<int> * tree(int &index , vector<int> &preorder , vector<int> &inorder, int left , int right ){
+    if (left > right) return NULL;
+    int pivot = left; 
+    while(inorder[pivot] != preorder[index]) pivot++;
+    index++;
+    TreeNode<int> * newNode = new TreeNode<int>(inorder[pivot]);
+    newNode->left = tree(index, preorder, inorder, left, pivot-1);
+    newNode->right = tree(index, preorder, inorder, pivot+1, right);
+    return newNode;
+}
+TreeNode<int> *buildBinaryTree(vector<int> &inorder, vector<int> &preorder)
+{
+    int index = 0;
+	return tree(index,preorder, inorder, 0 , inorder.size()-1);
+}
+
+// symmetric tree
+bool isEqual(BinaryTreeNode<int>* left, BinaryTreeNode<int>*  right) {
+    if (!left && !right)
+        return true;
+    
+    if (!left || !right || left->data != right->data)
+        return false;
+    
+    return isEqual(left->left, right->right) && isEqual(left->right, right->left);
+}
+
+bool isSymmetric(BinaryTreeNode<int>* root)
+{
+    if(!root) return true;    // Write your code here.    
+    return isEqual(root->left  , root->right);
+}
+
+
+// flatten Binary Tree to a  linked list
+#include <bits/stdc++.h> 
+
+void preorder(TreeNode<int>* root , vector<TreeNode<int>*>&a){
+    if(!root) return;
+    a.push_back(root);
+    preorder(root->left,a);
+    preorder(root->right,a);
+}
+TreeNode<int> *flattenBinaryTree(TreeNode<int> *root)
+{
+    TreeNode<int>* result;
+    if(root==NULL) return NULL;
+    if(root->left==NULL && root->right==NULL) return  root;
+    else{
+        result = root;
+        vector<TreeNode<int>*>ans;
+        preorder(root,ans);
+        reverse(ans.begin(),ans.end());
+        root = NULL;
+        root =  ans.back();
+        ans.pop_back();
+        while(ans.size()){
+            root->left = NULL;
+            root->right = ans.back();
+            root = root->right;
+            ans.pop_back();
+        }
+    }
+    return result;
+}
+
+// invert a binary tree
+
+#include <bits/stdc++.h> 
+
+bool extract_path(TreeNode<int> *root, TreeNode<int> *leaf, stack<TreeNode<int>*> &path) {
+    if(root == NULL) return 0;
+
+    path.push(root);
+
+    if(root->data == leaf->data) return 1;
+    bool lf = extract_path(root->left, leaf, path);
+    bool rg = extract_path(root->right, leaf, path);
+
+    if(lf || rg) return 1;
+
+    path.pop();
+    return 0;
+}
+
+TreeNode<int> * invertBinaryTree(TreeNode<int> *root, TreeNode<int> *leaf)
+{
+	// Write your code here.
+    if(root == NULL or leaf == NULL) return NULL;
+    
+    stack<TreeNode<int>*> path;
+    extract_path(root, leaf, path);
+
+
+    TreeNode<int> *parent = path.top();
+    path.pop();
+
+    TreeNode<int> *new_root = parent;
+
+    while(!path.empty()) {
+        TreeNode<int>* cur = path.top();
+        path.pop();
+
+        if(cur->left == parent) {
+            cur->left = NULL;
+        }
+
+        else {
+            cur->right = cur->left;
+            cur->left = NULL;
+        }
+
+        parent->left = cur;
+
+        parent = cur;
+    }
+
+    return new_root;
+}
+
+
+// children sum property
+#include <bits/stdc++.h> 
+
+void changeTree(BinaryTreeNode < int > * root) {
+    // Write your code here.
+
+    if(!root) return;
+
+    int child = 0;
+    if(root->left) child += root->left->data;   
+    if(root->right) child += root->right->data;
+
+    if(root->data <= child) root->data = child;
+    else {
+        if(root->left) root->left->data = root->data;
+        else if(root->right) root->right->data = root->data;
+    }
+    changeTree(root->left);
+    changeTree(root->right);
+    
+    int value = 0;
+    if(root->left) value += root->left->data;
+    if(root->right) value += root->right->data;
+    if(root->left or root->right) root->data = value;
+
+}  
+
+//  Count nodes
+
+#include <bits/stdc++.h> 
+
+void connectNodes(BinaryTreeNode< int > *root) {
+    if(!root) return ;
+    queue<BinaryTreeNode< int > *> q;
+    q.push(root);        
+    while(q.size()) {
+        BinaryTreeNode< int > * rightNode = nullptr;                    
+        int size = q.size();
+        while(size--) {                
+            auto cur = q.front(); q.pop();           
+            cur -> next = rightNode;                 
+            rightNode = cur;                          
+            if(cur -> right) q.push(cur -> right);
+            if(cur ->left ) q.push(cur -> left);                  
+        }
+    }
+}
+
+// search in a bst
+
+#include <bits/stdc++.h> 
+/*
+    Following is the Binary Tree node structure:
+
+    class BinaryTreeNode {
+    public : 
+        T data;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
+
+        BinaryTreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+    };
+*/
+
+bool searchInBST(BinaryTreeNode<int> *root, int x) {
+    // Write your code here.
+    if(!root) return false;
+    if(root->data == x) return true;
+    else if(root->data < x){
+        return searchInBST(root->right, x);
+    }
+    else{
+        return searchInBST(root->left ,x);
+    }
+    return false;
+}
+
+// Convert sorted array to B S T
+
+#include <bits/stdc++.h> 
+/************************************************************
+
+    Following is the TreeNode class structure
+
+    template <typename T>
+    class TreeNode {
+       public:
+        T val;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+        
+        TreeNode(T val) {
+            this->val = val;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+************************************************************/
+TreeNode<int>* sortedTree(vector<int> &nums , int start , int end){
+    if(start==end) return NULL;
+    int mid = (start+end)/2;
+    TreeNode<int>* res = new TreeNode<int>(nums[mid]);
+    res->left = sortedTree(nums, start, mid);
+    res->right = sortedTree(nums, mid+1, end);
+    return res;
+}
+TreeNode<int>* sortedArrToBST(vector<int> &arr, int n)
+{
+    return sortedTree(arr,0,n);
+}
+
+//  construct binary search tree from preorder and inorder
+
+#include <bits/stdc++.h> 
+
+TreeNode<int>* insertIntoBST(TreeNode<int>* root, int data) {
+    TreeNode<int>* parent = NULL;
+    TreeNode<int>* curr = root ;
+    while(curr!=NULL){
+        parent = curr;
+        if(curr->data > data) curr = curr->left;
+        else if(curr->data < data) curr = curr->right;
+        else return root;
+    }
+    if(parent==NULL) return new TreeNode<int>(data);
+    else if(parent->data > data) parent->left = new TreeNode<int>(data);
+    else parent->right = new TreeNode<int>(data);
+    return root;
+}
+
+TreeNode<int>* preOrderTree(vector<int> &preOrder){
+    TreeNode<int> *r = nullptr;
+    for(auto it : preOrder){
+        r = insertIntoBST(r, it);
+    }
+    return r;
+}
+
+// lca of two numbers in a bst 
+#include <bits/stdc++.h> 
+
+
+TreeNode<int>* LCAinaBST(TreeNode<int>* root, TreeNode<int>* p, TreeNode<int>* q)
+{
+    if(!root) return NULL;
+    if(root->data == p->data or root->data == q->data) return root;
+    if(root->data > p->data and root->data < q->data) return root;
+    else if(root->data < p->data and root->data > q->data) return root;
+    if(root->data > p->data and root->data > q->data) return LCAinaBST(root->left,p,q);
+    else if(root->data < p->data and root->data < q->data) return LCAinaBST(root->right, p, q);
+}
+
+
+//  predeccessor and successor of a bst 
+#include <bits/stdc++.h> 
+/*************************************************************
+*************************************************************/
+
+
+
+void inorder(BinaryTreeNode<int>* root, vector<int>&ans){
+    if(!root) return;
+    inorder(root->left, ans);
+    ans.push_back(root->data);
+    inorder(root->right,ans);
+}
+pair<int,int> predecessorSuccessor(BinaryTreeNode<int>* root, int key)
+{
+    vector<int> ans = {-1};
+    inorder(root, ans);
+    ans.push_back(-1);
+    pair<int, int> pr;
+    for(int i=1; i<ans.size()-1;i++){
+        if(ans[i] == key){
+            pr = {ans[i-1] , ans[i+1]};
+            return pr;
+        }
+    }
+}
+
+//  floor in a bst 
+#include <bits/stdc++.h> 
+
+void floor(TreeNode<int>* root , int x, int &result){
+    if(!root) return;
+    if(root->val == x){
+        result = root->val;
+        return;
+    }
+    else if(root->val < x){
+        result = max(result , root->val);
+        floor(root->right, x, result);
+    }
+    else if(root->val > x){
+        floor(root->left , x, result);
+    }
+}
+
+int floorInBST(TreeNode<int> * root, int x)
+{
+    int result = INT_MIN;
+    floor(root , x, result);
+    return result;
+}
+
+// ceil from a bst 
+#include <bits/stdc++.h> 
+void inorder(BinaryTreeNode<int> * root, int key , int &result){
+    if(root==nullptr) return ;
+    inorder(root->left, key , result);
+    if(root->data >= key and result > root->data) result = root->data;
+    inorder(root->right,key , result);
+}
+int findCeil(BinaryTreeNode<int> *node, int x){
+    // Write your code here.
+    int rs = INT_MAX;
+    inorder(node, x, rs);
+    return rs == INT_MAX ? -1 : rs;
+}
+
+// /kth largest number bst 
+
+#include <bits/stdc++.h> 
+/************************************************************
+    Following is the Binary Search Tree node structure
+    
+    template <typename T>
+    class TreeNode {
+        public :
+        T data;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+
+        ~TreeNode() {
+            if(left)
+                delete left;
+            if(right)
+                delete right;
+        }
+    };
+
+************************************************************/
+void inorder(TreeNode<int>* root, vector<int>&v){
+    if(root==nullptr) return ;
+    inorder(root->left, v);
+    v.push_back(root->data);
+    inorder(root->right,v);
+} 
+
+    
+int KthLargestNumber(TreeNode<int>* root, int k) 
+{
+   vector<int> ans;
+   inorder(root, ans);
+   return (ans.size() >= k) ? ans[ans.size()-k] : -1;
+}
+
+
+
+
+
+
+
+
 

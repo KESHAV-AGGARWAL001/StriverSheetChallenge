@@ -1996,4 +1996,59 @@ int singleNonDuplicate(vector<int>& nums)
 	return nums[l];
 }
 
+// / invert a tree 
+
+#include <bits/stdc++.h> 
+
+bool extract_path(TreeNode<int> *root, TreeNode<int> *leaf, stack<TreeNode<int>*> &path) {
+    if(root == NULL) return 0;
+
+    path.push(root);
+
+    if(root->data == leaf->data) return 1;
+    bool lf = extract_path(root->left, leaf, path);
+    bool rg = extract_path(root->right, leaf, path);
+
+    if(lf || rg) return 1;
+
+    path.pop();
+    return 0;
+}
+
+TreeNode<int> * invertBinaryTree(TreeNode<int> *root, TreeNode<int> *leaf)
+{
+	// Write your code here.
+    if(root == NULL or leaf == NULL) return NULL;
+    
+    stack<TreeNode<int>*> path;
+    extract_path(root, leaf, path);
+
+
+    TreeNode<int> *parent = path.top();
+    path.pop();
+
+    TreeNode<int> *new_root = parent;
+
+    while(!path.empty()) {
+        TreeNode<int>* cur = path.top();
+        path.pop();
+
+        if(cur->left == parent) {
+            cur->left = NULL;
+        }
+
+        else {
+            cur->right = cur->left;
+            cur->left = NULL;
+        }
+
+        parent->left = cur;
+
+        parent = cur;
+    }
+
+    return new_root;
+}
+
+
 

@@ -1840,8 +1840,24 @@ class Trie{
 };
 
 
-// 
+// intersection of two linked list 
 
+#include "bits/stdc++.h"
+Node* findIntersection(Node *firstHead, Node *secondHead)
+{
+    unordered_set<Node* > ump;
+    
+    for(Node* temp = firstHead ; temp!=NULL; temp = temp->next){
+        ump.insert(temp);
+    }
+
+    for(Node* temp = secondHead ;temp!=NULL;temp = temp->next){
+        if(ump.find(temp) != ump.end()) return temp;
+    }
+
+    return NULL;
+    
+}
 
 
 

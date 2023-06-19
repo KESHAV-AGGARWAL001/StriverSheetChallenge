@@ -1873,3 +1873,62 @@ int removeDuplicates(vector<int> &arr, int n) {
 }
 
 
+//  complete string (trie problem) 
+
+#include <bits/stdc++.h>
+
+struct Node{
+    Node* child[26];
+    bool isEnd;
+
+    Node(){
+        memset(child , 0, sizeof child);
+        isEnd = false;
+    }
+};
+
+class Trie {
+    Node* root;
+public:
+
+    Trie() {
+        root = new Node();
+    }
+    void insert(string word) {
+        Node* temp = root;
+        for(auto it : word){
+            int index = it-'a';
+            if (temp->child[index] == NULL) {
+              temp->child[index] = new Node();
+            }
+            temp = temp->child[index];
+        }
+        temp->isEnd = true;
+    }
+
+    bool search(string word){
+        Node* temp = root;
+        for(auto it : word){
+            int index = it-'a';
+            if(temp->child[index]->isEnd == false) return false;
+            temp = temp->child[index];
+        }
+        return true;
+    }
+};
+
+string completeString(int n, vector<string> &a) {
+    Trie* tr = new Trie();
+    for(auto it : a){
+        tr->insert(it);
+    }
+    string result = "";
+    for(auto it: a){
+        if(tr->search(it)){
+            if(it.length() == result.length() and lexicographical_compare(it.begin() , it.end() , result.begin() , result.end())) result = it;
+            else if(it.length() > result.length()) result = it;
+        }
+    }
+    return result.length() ? result : "None";
+}
+

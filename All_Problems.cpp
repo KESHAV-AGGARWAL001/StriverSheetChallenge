@@ -1932,3 +1932,40 @@ string completeString(int n, vector<string> &a) {
     return result.length() ? result : "None";
 }
 
+
+// N-Queens
+
+void search(int y, vector<bool> &column , vector<bool > &diag1 ,  vector<bool> &diag2 , vector<vector<int>> &board ,  int n  , vector<vector<vector<int>>>& ans)
+{
+    if (y == n)
+    {
+        ans.push_back(board);
+        return;
+    }
+    for (int x = 0; x < n; x++)
+    {
+        if (column[x] || diag1[x + y] || diag2[x - y + n - 1]) continue;
+        column[x] = diag1[x + y] = diag2[x - y + n - 1] = true;
+        board[x][y] = 1;
+        search(y + 1 , column , diag1, diag2 , board, n , ans);
+        board[x][y] = 0;
+        column[x] = diag1[x + y] = diag2[x - y + n - 1] = false;
+    }
+}
+
+vector<vector<int>> solveNQueens(int n) {
+    vector<vector<vector<int>>> ans;
+    vector<vector<int>> board(n , vector<int> (n,0));
+    vector<bool> column(n) , diag1(2*n-1), diag2(2*n-1);
+    search(0, column,diag1, diag2 , board , n  , ans);
+    for(auto it : ans){
+        for(int i=0; i<n;i++){
+            for(int j=0; j<n;j++){
+                cout<<it[i][j]<<" ";
+            }
+        }
+        cout<<endl;
+    }
+}
+
+

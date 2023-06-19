@@ -1859,6 +1859,17 @@ Node* findIntersection(Node *firstHead, Node *secondHead)
     
 }
 
-
+//  remove duplicates from sorted array 
+int removeDuplicates(vector<int> &arr, int n) {
+	int temp = arr[0];
+	int count = 1;
+	for(int i=1; i<arr.size();i++){
+		if(temp!=arr[i]){
+			temp = arr[i];
+			count++;
+		}
+	}
+	return count;
+}
 
 

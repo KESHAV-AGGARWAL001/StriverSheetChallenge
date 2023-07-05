@@ -3193,6 +3193,18 @@ int maxProfit(vector<int> &values, vector<int> &weights, int n, int W)
 	return d[n][W];
 }
 
+//  longest increasing subsequence 
+#include<bits/stdc++.h>
+
+int longestIncreasingSubsequence(int A[], int n)
+{
+    int len = 0;
+    for(int i=0; i<n;i++) 
+        if(len == 0 || A[len-1] < A[i]) A[len++] = A[i];             
+        else *lower_bound(A, A+len , A[i]) = A[i];    
+    return len;
+}
+
 
 
 

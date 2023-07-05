@@ -3171,6 +3171,27 @@ int KthLargestNumber(TreeNode<int>* root, int k)
 
 
 
+//  01 knapsack 
+
+int maxProfit(vector<int> &values, vector<int> &weights, int n, int W)
+{
+	vector<vector<int>> d(n+1, vector<int> (W+1,0));
+	for (int i = 1; i <=n ; i++)
+	{
+		for (int w = 1; w <= W; w++)
+		{                    
+			if (weights[i-1] <= w)
+			{
+				d[i][w] = max(d[i-1][w],( d[i-1][ w - weights[i-1]] + values[i-1]));
+			}
+			else
+			{
+				d[i][w] = d[i-1][w];
+			}                    
+		}
+	}
+	return d[n][W];
+}
 
 
 

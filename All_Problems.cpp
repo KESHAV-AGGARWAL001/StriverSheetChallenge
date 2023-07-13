@@ -3129,31 +3129,6 @@ int findCeil(BinaryTreeNode<int> *node, int x){
 // /kth largest number bst 
 
 #include <bits/stdc++.h> 
-/************************************************************
-    Following is the Binary Search Tree node structure
-    
-    template <typename T>
-    class TreeNode {
-        public :
-        T data;
-        TreeNode<T> *left;
-        TreeNode<T> *right;
-
-        TreeNode(T data) {
-            this -> data = data;
-            left = NULL;
-            right = NULL;
-        }
-
-        ~TreeNode() {
-            if(left)
-                delete left;
-            if(right)
-                delete right;
-        }
-    };
-
-************************************************************/
 void inorder(TreeNode<int>* root, vector<int>&v){
     if(root==nullptr) return ;
     inorder(root->left, v);
@@ -3206,7 +3181,755 @@ int longestIncreasingSubsequence(int A[], int n)
 }
 
 
+//  kth smallest element 
+
+void value(TreeNode<int>* root, int k ,  int &result,int &val ){
+    if(!root) return;
+    value(root->left, k ,result, val);
+    val++;
+    if(val <= k) result = root->data;
+    value(root->right, k, result , val);
+}
+int kthSmallest(TreeNode<int> *root, int k)
+{
+    int val = 0;
+    int result = 0;
+    value(root, k , result, val);
+    return result;
+}
+// pair sum bst 
+
+void inorder(BinaryTreeNode<int>* root, vector<int>&v){
+    if(root==nullptr) return ;
+    inorder(root->left, v);
+    v.push_back(root->data);
+    inorder(root->right,v);
+}
+
+bool pairSumBst(BinaryTreeNode<int> *root, int k)
+{
+    vector<int> in;
+    inorder(root, in);
+    int i = 0, j = in.size()-1;
+    while(i!=j){
+        if(in[i] + in[j] == k) return true;
+        else if(in[i] + in[j] < k) i++;
+        else j--;
+    }
+    return false;
+}
+
+
+// bst iterator
+#include <bits/stdc++.h> 
+
+
+class BSTiterator
+{
+    public:
+    queue<int>q;
+    vector<int>ans;
+    TreeNode<int>* node;
+    BSTiterator(TreeNode<int> *root)
+    {
+        node = root;
+        inorder(node,ans);
+        for(auto it:ans){
+            q.push(it);
+        }
+    }
+
+    void inorder(TreeNode<int>* root, vector<int>&ans){
+        if(!root) return;
+        inorder(root->left,ans);
+        ans.push_back(root->data);
+        inorder(root->right,ans);
+    }
+
+    int next()
+    {
+        int val = q.front();
+        q.pop();
+        return val;
+    }
+
+    bool hasNext()
+    {
+        return (q.empty())?false:true;
+    }
+};
+
+//  serialize and deserialize 
+
+#include "bits/stdc++.h"
+string serializeTree(TreeNode<int> *root)
+{
+    if(root==NULL)
+        return "";
+    
+    string s;
+    queue<TreeNode<int>*>q;
+    q.push(root);
+    while(!q.empty())
+    {
+        TreeNode<int>* node=q.front();
+        q.pop();
+        if(node==NULL)
+        {
+            s.append("#,");
+        }
+        else
+        {
+            s.append(to_string(node->data)+',');
+        }
+        if(node!=NULL)
+        {
+            q.push(node->left);
+            q.push(node->right);
+        }     
+    }
+    return s;
+
+}
+
+TreeNode<int>* deserializeTree(string &data)
+{
+    if(data.size()==0) return NULL;
+        
+    stringstream s(data);
+    string str;
+    getline(s, str, ',');
+    TreeNode<int>* root = new TreeNode<int>(stoi(str));
+    queue<TreeNode<int>*>q;
+    q.push(root);
+    while(!q.empty())
+    {
+        TreeNode<int>* node=q.front();
+        q.pop();
+        
+            getline(s, str, ',');
+        if(str=="#")
+        {
+            node->left=NULL;
+        }
+        else
+        {
+            TreeNode<int>* l=new TreeNode<int>(stoi(str));
+            node->left=l;
+            q.push(l);
+        }
+        
+            getline(s, str, ',');
+        if(str=="#")
+        {
+            node->right=NULL;
+        }
+        else
+        {
+            TreeNode<int>* r=new TreeNode<int>(stoi(str));
+            node->right=r;
+            q.push(r);
+        }
+        
+    }
+    return root;
+        
+
+}
 
 
 
+// median in a stream
 
+#include "bits/stdc++.h"
+vector<int> findMedian(vector<int> &arr, int n){
+	
+	vector<int> ans;
+	priority_queue<int> left;
+	priority_queue<int, vector<int> , greater<int>> right;
+
+	for(int i=0; i<n;i++){
+		if(!left.empty() and left.top() > arr[i]){
+			left.push(arr[i]);
+			if(left.size() > right.size()+1) {
+				right.push(left.top());
+				left.pop();
+			}
+		}
+		else{
+			right.push(arr[i]);
+			if(right.size() > left.size()+1){
+				left.push(right.top());
+				right.pop();
+			}
+		}
+
+		if((i+1)&1){
+			ans.push_back((left.size() > right.size()) ? left.top() : right.top());
+		}
+		else{
+			ans.push_back((left.top()+right.top())/2);
+		}
+	}
+
+	return ans;
+}
+
+
+// kth largest
+#include <bits/stdc++.h> 
+class Kthlargest {
+public:
+    priority_queue<int , vector<int> , greater<int>> ans;
+    int key;
+    Kthlargest(int k, vector<int> &arr) {
+        key = k;
+        for(auto it: arr) ans.push(it);
+    }
+
+    void add(int num) {
+        ans.push(num);
+    }
+
+    int getKthLargest() {
+        while(ans.size()>key){
+            ans.pop();
+        }
+        return ans.top();
+    }
+};
+
+
+//  count distinct element in a k window size 
+#include <bits/stdc++.h> 
+vector<int> countDistinctElements(vector<int> &arr, int k) 
+{
+    vector<int> ans;
+    unordered_map<int, int> mp;
+    for(int i=0; i<k;i++) mp[arr[i]]++;
+    ans.push_back(mp.size());
+    for(int i=k;i<arr.size();i++){
+        mp[arr[i]]++;
+        mp[arr[i-k]]--;
+        if(mp[arr[i-k]] == 0) mp.erase(arr[i-k]);
+        ans.push_back(mp.size());
+    }
+    return ans;
+	
+}
+
+
+//  kth largest in unsorted array 
+#include <bits/stdc++.h> 
+int kthLargest(vector<int>& arr, int size, int K)
+{
+	priority_queue<int, vector<int> , greater<int>> pq;
+	for(auto it : arr) pq.push(it);
+	while(pq.size() > K) pq.pop();
+	return pq.top();
+}
+
+
+//  flood fill algo 
+void floodFill(vector<vector<int> >& screen, int sr, int sc,
+               int row, int col, int source, int color)
+{
+    if (sr < 0 || sr >= row || sc < 0 || sc >= col)
+        return;
+ 
+    if (screen[sr][sc] != source)
+        return;
+   
+    screen[sr][sc] = color;
+    floodFill(screen, sr - 1, sc, row, col, source,color); 
+    floodFill(screen, sr + 1, sc, row, col, source,color); 
+    floodFill(screen, sr, sc + 1, row, col, source,color); 
+    floodFill(screen, sr, sc - 1, row, col, source,color); 
+}
+
+
+vector<vector<int>> floodFill(vector<vector<int>> &image, int x, int y, int newColor)
+{
+    int prevColor = image[x][y];
+    int n = image.size();
+    int m = image[0].size();
+    if(prevColor == newColor) return image;
+    floodFill(image, x, y, n ,m ,prevColor , newColor);
+    return image;
+}
+
+/ clone graphn
+#include <bits/stdc++.h> 
+void dfs(graphNode* curr , graphNode* node, vector<graphNode*> &visited){
+	visited[node->data]  = node;
+	for(auto it: curr->neighbours){
+		if(!visited[it->data]){
+			graphNode* newNode = new graphNode(it->data);
+			(node->neighbours).push_back(newNode);
+			dfs(it,newNode , visited);
+		}
+		else 
+			(node->neighbours).push_back(visited[it->data]);
+	}
+}
+
+graphNode *cloneGraph(graphNode *node)
+{
+    if(!node) return NULL;
+	vector<graphNode*> visited(100000, NULL);
+	graphNode* copy = new graphNode(node->data);
+	visited[node->data] = copy;
+	dfs(node, copy, visited);
+	return copy;
+}
+
+
+//  dfs traversal
+void dfs(int i , vector<int> adj[] , vector<bool> &visited , vector<int> &ans){
+    visited[i] = true;
+    ans.push_back(i);
+    for(auto it : adj[i]){
+        if(!visited[it]){
+            dfs(it, adj, visited , ans);
+        }
+    }
+}
+
+vector<vector<int>> depthFirstSearch(int V, int E, vector<vector<int>> &edges)
+{
+    vector<vector<int>> ans;
+    vector<int> adj[V];
+    for(auto it : edges){
+        adj[it[0]].push_back(it[1]);        
+        adj[it[1]].push_back(it[0]);
+    }
+    vector<bool> visited(V, false);
+    for(int i=0; i<V ;i++){
+        vector<int> temp;
+        if(!visited[i]){
+            dfs(i, adj, visited,temp);
+        }
+        if(temp.size()) ans.push_back(temp);
+    }
+    return ans;
+
+}
+
+
+//  bfs traversal
+#include <bits/stdc++.h> 
+vector<int> BFS(int vertex, vector<pair<int, int>> edges)
+{
+    vector<int> ans;
+    
+    vector<int> adj[vertex];
+    for(auto it : edges){
+        adj[it.first].push_back(it.second);
+        adj[it.second].push_back(it.first);
+    }
+
+    for(int i=0; i<vertex;i++){
+        sort(adj[i].begin() , adj[i].end());
+    }
+    
+    vector<bool> visited(vertex, false);
+
+    for(int i=0 ;i<vertex ;i++){
+        if(visited[i] == false){
+            queue<int> pq;
+            pq.push(i);
+            while(pq.size()){
+                int j = pq.front();
+                pq.pop();
+                if(visited[j] == false){
+                    visited[j] = true;
+                    ans.push_back(j);
+                    for(auto it : adj[j]){
+                        if(visited[it] == false){
+                            pq.push(it);
+                        }
+                    }
+                }
+            }
+            visited[i] = true;
+        }
+    }
+    return ans;
+}
+
+
+//  cycle detection in undirected graph
+
+#include "bits/stdc++.h"
+
+void dfs(int x, int p, vector<int>& col, vector<vector<int>>& v , bool &flag)
+{
+    col[x] = 1;
+    for (auto itr : v[x])
+    {
+        if (itr == p)
+        {
+            continue;
+        }
+        if (col[itr] == 1)
+        {
+            flag = 1;
+        }
+        if (col[itr] == -1)
+        {
+            dfs(itr, x, col, v,flag);
+        }
+    }
+    col[x] = 2;
+}
+
+
+string cycleDetection (vector<vector<int>>& edges, int n, int m)
+{
+	vector<vector<int>> adj(n+1);
+    for(auto it : edges){
+        int u = it[0];
+        int v = it[1];
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    } 
+    vector<int>col(n + 1, -1);
+	bool flag = false;
+    for (int i = 1; i <= n; i++)
+    {
+        if (col[i] == -1) {
+            dfs(i, 0, col, adj, flag);
+        }
+    }
+    return flag == 1 ? "Yes" : "No";
+}
+
+
+// detection of cycle in directed graph
+#include "bits/stdc++.h"
+
+int detectCycleInDirectedGraph(int n, vector < pair < int, int >> & edges) {
+    vector<int> adj[n+1];
+    for(auto it : edges){
+        adj[it.first].push_back( it.second );
+    }
+    
+    vector<int> inDegree(n+1, 0); 
+    queue<int> q; 
+    int visited = 0;
+    for (int u = 0; u <= n; u++) {
+        for (auto v : adj[u]) {
+            inDegree[v]++;
+        }
+    }
+
+    for (int u = 0; u <= n; u++) {
+        if (inDegree[u] == 0) {
+            q.push(u);
+        }
+    }
+
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+        visited++;
+
+        for (auto v : adj[u]) {
+            inDegree[v]--;
+            if (inDegree[v] == 0) {
+                q.push(v);
+            }
+        }
+    }
+
+    return (visited != n+1) ?1:0;
+}
+
+//  topo sort 
+
+#include <bits/stdc++.h> 
+
+void dfs(int start, vector<int> adj[] , vector<bool> &visited , stack<int> &st){
+    visited[start] = true;
+    for(auto it: adj[start]){
+        if(!visited[it]){
+            dfs(it,adj,visited,st);
+        }
+    }
+    st.push(start);
+}
+vector<int> topologicalSort(vector<vector<int>> &edges, int V, int E){
+    stack<int> st;
+    vector<bool> visited(V,false);
+
+    vector<int> adj[V];
+    
+    for(auto it: edges){
+        adj[it[0]].push_back(it[1]);
+    }
+
+    for(int i= 0; i<V ;i++){
+        if(!visited[i]){
+            dfs(i, adj,visited,st);
+        }
+    }
+
+    vector<int> ans;
+    while(st.size()){
+        ans.push_back(st.top());
+        st.pop();
+    }
+
+    return ans;
+}
+
+
+//  find number of islands 
+#include "bits/stdc++.h"
+
+void bfs(int row, int col, int** grid, vector<vector<int>>& visited , int n, int m) {
+   visited[row][col] = 1;
+   queue <pair<int, int>> q;
+   q.push({row, col});
+   while (!q.empty()) {
+      
+      int row = q.front().first;
+      int col = q.front().second;
+      q.pop();
+      vector<int> drow = {-1,1,0};
+      for (int i = 0; i < 3; i++) {
+         for(int j=0;j<3;j++){
+            int nrow = row + drow[i];
+            int ncol = col + drow[j];
+            if (nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && 
+               visited[nrow][ncol] == 0 && grid[nrow][ncol] == 1 ) {
+                  visited[nrow][ncol] = 1;
+                  q.push({nrow, ncol});
+            }
+         }
+      }
+   }
+}  
+int getTotalIslands(int** grid, int n, int m)
+{
+   vector<vector<int>> visited(n, vector<int> (m, 0));
+   int cnt = 0;
+   for (int i = 0; i < n; i++) {
+      for (int j = 0; j < m; j++) {
+            if (visited[i][j] == 0 && grid[i][j] == 1) {
+               cnt++;
+               bfs(i, j, grid, visited,n,m);
+            }
+      }
+   }
+   return cnt;
+}
+
+
+//  check bipartrite graph
+
+#include "bits/stdc++.h"
+
+bool isGraphBirpatite(vector<vector<int>> &edges) {
+	int n = edges.size() , m = edges[0].size();
+	vector<int> adj[n];
+	for(int i=0; i<n;i++){
+		for(int j=0; j<m;j++){
+			if(edges[i][j] and i!=j){
+				adj[i].push_back(j);
+				adj[j].push_back(i);
+			}
+		}
+	}
+	
+	vector<int> color(n,-1);
+	for(int i=0 ;i<n;i++){
+		if(color[i] == -1){
+			queue<pair<int,int>> q;
+			q.push({i,0});
+			color[i] = 0;
+			while(q.size()){
+				int point = q.front().first;
+				int colour = q.front().second;
+				q.pop();
+				for(auto x: adj[point]){
+					if(color[x] == colour){
+						return false;
+					}
+			
+					if(color[x] == -1){
+						color[x] = !colour;
+						q.push({x,color[x]});
+					}
+				}
+			}
+		}
+	}
+	return true;
+}
+
+
+//  dikshtra's algo 
+#include <bits/stdc++.h> 
+vector<int> dijkstra(vector<vector<int>> &vec, int vertices, int edges, int source)
+ {
+    int n = vertices;
+    vector<int> distance(n,1e9);
+    vector<bool> processed(n, false);
+    vector<pair<int,int> > adj[n];
+    for(auto it : vec){
+        adj[it[0]].push_back({it[1] , it[2]});
+        adj[it[1]].push_back({it[0] , it[2]});
+    }
+    distance[source] = 0;
+    priority_queue<pair<int,int>, vector<pair<int,int>> , greater<pair<int,int>> > q;
+    q.push({0,source});
+    while (!q.empty()) {
+        int a = q.top().second;
+        q.pop();
+        if (processed[a]) continue;
+        processed[a] = true;
+        for (auto u : adj[a]) {
+            int b = u.first, w = u.second;
+            if (distance[a]+w < distance[b]) {
+                distance[b] = distance[a]+w;
+                q.push({distance[b], b});
+            }
+        }
+    }
+    for(int i=0; i<n; i++) {
+        if(distance[i] == 1e9) distance[i] = INT_MAX;
+    }
+    return distance;
+}
+
+
+// bellman ford 
+
+#include <bits/stdc++.h> 
+int bellmonFord(int n, int m, int src, int dest, vector<vector<int>> &edges) {
+    vector<int> distance(n+1 , 0);
+    for(int i = 1; i<=n;i++) distance[i] = INT_MAX;
+    distance[src] = 0;
+    for (int i = 1; i <= n-1; i++) {
+        for (auto e : edges) {
+            int a = e[0], b= e[1], w=e[2];
+            if(distance[a] != INT_MAX and distance[a] + w < distance[b]){
+                distance[b] = min(distance[b], distance[a] + w);
+            }
+        }
+    }
+    return distance[dest] == INT_MAX ? 1e9 : distance[dest];
+}
+
+
+//  floyd warshall 
+int floydWarshall(int n, int m, int src, int dest, vector<vector<int>> &edges) {
+    vector<vector<int>> adj(n+1,(vector<int> (n+1,0)));
+    
+    for(auto it  :edges){
+        int i= it[0] , j = it[1];
+        int wt = it[2];
+        adj[i][j] = wt;
+    }
+    
+    vector<vector<long long>> dis(n+1, vector<long long>(n+1, INT_MAX));
+    for(int i=1; i<n+1;i++){
+        for(int j=1; j<n+1;j++){
+            if(adj[i][j]) dis[i][j] = adj[i][j];
+            else if(i==j) dis[i][j] = 0;
+        }
+    }
+    
+    for (int k = 1; k <= n; k++) {
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                dis[i][j] = min(dis[i][j],dis[i][k]+dis[k][j]);
+            }
+        }
+    }   
+    
+    return dis[src][dest] >= 1e7 ? 1e9 : dis[src][dest];
+
+}
+
+
+//  maximum product subarray 
+
+#include <bits/stdc++.h> 
+int maximumProduct(vector<int> &nums, int n)
+{
+	int maxi = INT_MIN;
+	int prod=1;
+
+	for(int i=0;i<n;i++)
+	{
+		prod*=nums[i];
+		maxi=max(prod,maxi);
+		if(prod==0)
+		prod=1;
+	}
+	prod=1;
+	for(int i=n-1;i>=0;i--)
+	{
+		prod*=nums[i];
+
+		maxi=max(prod,maxi);
+		if(prod==0)
+		prod=1;
+	}
+	return maxi;
+}
+
+
+//  longest increasing subsequence 
+#include<bits/stdc++.h>
+
+int longestIncreasingSubsequence(int A[], int n)
+{
+    int len = 0;
+    for(int i=0; i<n;i++) 
+        if(len == 0 || A[len-1] < A[i]) A[len++] = A[i];             
+        else *lower_bound(A, A+len , A[i]) = A[i];    
+    return len;
+}
+
+
+//  minimum path sum 
+#include <bits/stdc++.h> 
+int minSumPath(vector<vector<int>> &grid) {
+    int m = grid.size();
+    int n = grid[0].size();
+    
+    for (int i = 1; i < m; i++) {
+        grid[i][0] += grid[i-1][0];
+    }
+    
+    for (int j = 1; j < n; j++) {
+        grid[0][j] += grid[0][j-1];
+    }
+    
+    for (int i = 1; i < m; i++) {
+        for (int j = 1; j < n; j++) {
+            grid[i][j] += min(grid[i-1][j], grid[i][j-1]);
+        }
+    }
+    
+    return grid[m-1][n-1];
+}
+
+
+//  rod cutting 
+int cutRod(vector<int> &price, int n)
+{
+
+	vector<int> dp(n+1,0);
+	for(int i=1; i<=n;i++){
+		int temp = 0;
+		for(int j=0; j<i;j++){
+			temp = max(temp, price[j] + dp[i-j-1]);
+		}
+		dp[i] = temp;
+	}
+	return dp[n];
+}

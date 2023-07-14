@@ -3933,3 +3933,51 @@ int cutRod(vector<int> &price, int n)
 	}
 	return dp[n];
 }
+
+
+//  minimum number of coins 
+#include<bits/stdc++.h> 
+
+int findMinimumCoins(int amount) 
+{
+   
+   int count = 0;
+   vector<int> coins = {1000, 500 , 100 , 50 , 20 , 10 , 5, 2 ,1};
+   for(auto it : coins){
+       while(amount >= it)
+       {
+           amount -= it;
+           count++;
+       }
+   }
+   return count;
+}
+
+
+//  kth permutation 
+
+string kthPermutation(int n, int k) {
+    int factorial = 1;
+    vector<string> vec;
+    for(int i=1; i<=n;i++)
+    {
+        factorial *= i;
+        vec.push_back(to_string(i));
+    }
+    factorial /= n;
+    k--;
+
+    string result = "";
+    while(1){
+        result += vec[k/factorial];
+        vec.erase(vec.begin() + k/factorial);
+        
+        if(vec.empty()) break;
+        k = k% factorial;
+        factorial = factorial / vec.size();
+    }
+
+    return result;
+}
+
+

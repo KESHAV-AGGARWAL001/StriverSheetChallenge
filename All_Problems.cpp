@@ -3981,3 +3981,105 @@ string kthPermutation(int n, int k) {
 }
 
 
+//  flatten a linked list 
+/*
+ * Definition for linked list.
+ * class Node {
+ *  public:
+ *		int data;
+ *		Node *next;
+ * 		Node *child;
+ *		Node() : data(0), next(nullptr), child(nullptr){};
+ *		Node(int x) : data(x), next(nullptr), child(nullptr) {}
+ *		Node(int x, Node *next, Node *child) : data(x), next(next), child(child) {}
+ * };
+ */
+Node* merge(Node* head1 , Node* head2) {
+	if(!head1) return head2;
+	if(!head2) return head1;
+	Node* result = NULL;
+	if(head1 -> data <= head2->data){
+		result = head1;
+		result->child =  merge(head1->child, head2);
+	}
+	else{
+		result = head2;
+		result->child = merge(head1, head2->child);
+	}
+	return result;
+}
+
+
+Node* flattenLinkedList(Node* root) 
+{
+	if(root == NULL or root->next == NULL) return root;
+	Node* newl= flattenLinkedList(root->next);
+	root->next = NULL;
+	Node* newroot = merge(newl , root);
+	return newroot;
+}
+
+
+//  kth element of two sorted arrays 
+#include "bits/stdc++.h"
+
+int ninjaAndLadoos(vector<int> &row1, vector<int> &row2, int m, int n, int k) {
+
+    if (k > (m + n) || k < 1)
+        return -1;
+
+
+    if(m>n)
+        return ninjaAndLadoos(row2, row1, n, m, k);
+
+    if(m==0) return row2[k-1];
+
+    if(k==1) return min(row1.front() , row2.front());
+
+    int i = min(m, k/2) , j = min(n, k/2);
+
+    if(row1[i-1] > row2[j-1]){
+        vector<int> temp (row2.begin()+j , row2.end());
+        return ninjaAndLadoos(row1, temp, m , n-j , k-j);
+    }
+
+    vector<int> temp(row1.begin()+i, row1.end());
+    return ninjaAndLadoos(temp , row2 , m-i , n , k-i );
+
+    
+}
+
+// compare version numbers 
+#include <bits/stdc++.h> 
+int compareVersions(string a, string b) 
+{
+    int n = a.size(), m = b.size();
+    int i = 0, j = 0;
+    while (i < n or j < m) {
+      if (a[i] == '0')
+        while (i < n and a[i] == '0')
+          i++;
+
+      if (b[j] == '0')
+        while (j < m and b[j] == '0')
+          j++;
+
+      long long temp1 = 0, temp2 = 0;
+
+      while (i < n and a[i] != '.')
+        temp1 = (temp1 * 10) + (a[i++] - '0');
+
+      while (j < m and b[j] != '.')
+        temp2 = (temp2 * 10) + (b[j++] - '0');
+
+      if (temp1 > temp2)
+        return 1;
+      else if (temp1 < temp2)
+        return -1;
+
+      i++, j++;
+    }
+
+    return 0;
+}
+

@@ -4151,3 +4151,31 @@ int largestBST(TreeNode<int>* root)
 }
 
 
+//  subset sum equals to k 
+
+#include <bits/stdc++.h> 
+bool sumHai(int ind, int target, vector<int>& arr, vector<vector<int>> &dp){
+    if(target==0)
+        return true;
+    
+    if(ind == 0)
+        return arr[0] == target;
+    
+    if(dp[ind][target]!=-1)
+        return dp[ind][target];
+        
+    bool notTaken = sumHai(ind-1,target,arr,dp);
+    
+    bool taken = false;
+    if(arr[ind]<=target) taken = sumHai(ind-1,target-arr[ind],arr,dp);        
+    return dp[ind][target] = notTaken or taken;
+}
+
+bool subsetSumToK(int n, int k, vector<int> &nums) {
+    int sum = accumulate(nums.begin(),nums.end(),0);
+    vector<vector<int>> dp(n+1, vector<int> (k+1,-1));
+    return sumHai(nums.size()-1 , k , nums , dp);
+}
+
+
+

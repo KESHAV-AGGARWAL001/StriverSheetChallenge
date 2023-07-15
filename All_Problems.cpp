@@ -4083,3 +4083,36 @@ int compareVersions(string a, string b)
     return 0;
 }
 
+// / partial bst 
+#include <bits/stdc++.h> 
+
+bool validateBST(BinaryTreeNode<int> *root) {
+    if(!root or (!root->left and !root->right)) return true;
+
+    bool leftSide = validateBST(root->left);
+    bool rightSide = validateBST(root->right);
+
+    bool ans = true;
+
+    if(root->left){
+        ans = ans && (root->left->data <= root->data);
+    }
+
+    if(root->right){
+        ans = ans && (root->right->data >= root->data);
+    }
+    
+    return leftSide && rightSide &&ans;
+}
+
+
+//  finding nth root of m 
+#include<math.h>
+
+int NthRoot(int n, int m) {
+    
+    for(int i  = 0 ; pow(i,n) <=m ;i++){
+        if(pow(i,n) == m) return i;
+    }
+    return -1;
+}

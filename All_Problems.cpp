@@ -4116,3 +4116,38 @@ int NthRoot(int n, int m) {
     }
     return -1;
 }
+
+
+//  size of largest bst 
+
+#include <bits/stdc++.h> 
+
+class Node{
+public:
+    int maxval , minval , maxsz ;
+    Node(int a, int b, int c){
+        minval = a, maxval = b, maxsz = c;
+    }
+};
+
+Node solve(TreeNode<int> * root){
+    if(!root){
+        return Node(INT_MAX , INT_MIN, 0);
+    }
+
+    auto  left = solve(root->left);
+    auto  right = solve(root->right);
+
+    if(left.maxval < root->data and right.minval > root->data){
+        return Node(min(root->data , left.minval) , max(root->data , right.maxval) , 1 + left.maxsz + right.maxsz);
+    }
+
+    return Node(INT_MIN , INT_MAX , max(left.maxsz , right.maxsz));
+}
+
+int largestBST(TreeNode<int>* root) 
+{
+    return solve(root).maxsz;
+}
+
+

@@ -4208,3 +4208,20 @@ string longestPalinSubstring(string s)
 }
 
 
+//  minimum characters for palindrome 
+
+#include<bits/stdc++.h>
+int minCharsforPalindrome(string s) {
+	int n = s.length();
+	int i=0 , j=n-1, minChars = 0 , temp = j;
+
+	while(i<j){
+		if(s.at(i) == s.at(j)) i++,j--;
+		else minChars++ , i=0, temp-- , j=temp;
+	}
+
+	return minChars;
+}
+
+
+

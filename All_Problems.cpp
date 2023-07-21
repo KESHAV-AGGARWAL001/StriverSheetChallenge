@@ -4225,3 +4225,40 @@ int minCharsforPalindrome(string s) {
 
 
 
+//  convert a given binary tree to doubly linked list
+
+
+#include <bits/stdc++.h> 
+
+void inOrder(BinaryTreeNode<int>* root , vector<int> &inorder)
+{
+    stack<BinaryTreeNode<int>*> s;
+    BinaryTreeNode<int>*  curr = root;
+ 
+    while (curr != NULL || s.empty() == false) {
+         
+        while (curr != NULL) {
+            s.push(curr);
+            curr = curr->left;
+        }
+        curr = s.top();
+        s.pop();
+        inorder.push_back(curr->data);
+        curr = curr->right;
+    }
+}
+BinaryTreeNode<int>* BTtoDLL(BinaryTreeNode<int>* root) {
+    if(!root) return NULL;
+    vector<int> inorder;
+    inOrder(root , inorder);
+    BinaryTreeNode<int>* head = new BinaryTreeNode<int> (inorder[0]);
+    BinaryTreeNode<int>* result = head;
+    for(int i=1 ; i<inorder.size();i++){
+        head->right = new BinaryTreeNode<int> (inorder[i]);
+        head = head->right;
+    }
+    return result;
+}
+
+
+

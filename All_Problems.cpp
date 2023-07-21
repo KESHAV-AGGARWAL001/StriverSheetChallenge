@@ -4178,4 +4178,33 @@ bool subsetSumToK(int n, int k, vector<int> &nums) {
 }
 
 
+//  maximum palindrome substring 
+
+#include "bits/stdc++.h"
+
+string ans = "";
+void expand(string s , int left ,int right)
+{
+    while(left >= 0 &&  right < s.size())
+    {
+        if(s[left] != s[right]){
+            break;
+        }
+        left--,right++;
+    }
+    if(ans.size() < right - left ) ans = s.substr(left+1 , right - left - 1);
+}
+
+string longestPalinSubstring(string s)
+{
+    reverse(s.begin() , s.end());
+    if(s.length() == 0) return "";
+    for(int i = 0 ; i < s.size() ; i++)
+    {
+        expand(s , i , i);
+        expand(s , i , i+1);
+    }
+    return ans;
+}
+
 

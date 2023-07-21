@@ -4318,3 +4318,26 @@ vector<int> MinimumCoins(int amount)
     }
     return result;
 }
+
+
+//  word break problem
+
+#include <bits/stdc++.h> 
+bool wordBreak(vector < string > & arr, int n, string & target) {
+    unordered_set<string> st;
+    for(auto it : arr) st.insert(it);
+    string temp = "";
+    int index = 0;
+
+    int resultIndex = -1;
+    
+    while(index < target.length()){
+        temp += target[index];
+        if(st.find(temp) != st.end()){
+            temp = "" , resultIndex = index;
+        }
+        index++;
+    }
+    return (resultIndex == target.length()-1);
+}
+

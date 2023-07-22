@@ -4341,3 +4341,29 @@ bool wordBreak(vector < string > & arr, int n, string & target) {
     return (resultIndex == target.length()-1);
 }
 
+
+//  reverse K nodes in a linked list 
+
+#include <bits/stdc++.h>
+
+Node *getListAfterReverseOperation(Node *head, int n, int b[]){
+	
+	vector<int> ans;
+	for(auto it = head ; it != NULL; it = it->next) ans.push_back(it->data) ;
+	int SumValue = 0;
+	for(int i=0; i<n;i++){
+		reverse(ans.begin() + SumValue , min(ans.begin() + SumValue + b[i] , ans.end()));
+		SumValue += b[i];
+	}
+	Node* newHead = new Node(0);
+	Node* result = newHead;
+	for(auto it : ans){
+		newHead->next = new Node(it);
+		newHead = newHead->next;
+	}
+	return result->next;
+}
+
+
+// 
+

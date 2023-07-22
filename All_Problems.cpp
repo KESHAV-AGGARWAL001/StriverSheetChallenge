@@ -4365,5 +4365,61 @@ Node *getListAfterReverseOperation(Node *head, int n, int b[]){
 }
 
 
-// 
+// maximum xor of two numbers 
+
+
+#include <bits/stdc++.h> 
+
+struct Node{
+    Node* child[2];
+
+    Node(){
+        memset(child , 0, sizeof child);
+    }
+};
+
+class Trie{
+public:
+    Node* root ;
+    Trie(){
+        root = new Node();
+    }
+
+    void insertNum(int num){
+        Node* node = root;
+        for(int i=31;i>=0;i--){
+            int CurrentBit = (num>>i)&1;
+            if(node->child[CurrentBit] == NULL){
+                node->child[CurrentBit] = new Node();
+            }
+            node = node->child[CurrentBit];
+        }
+    }
+
+    int getMaxValue(int num){
+        Node* node = root;
+        int maximum = 0;
+        for(int i=31;i>=0;i--){
+            int CurrentBit = (num>>i)&1;
+            if(node->child[1-CurrentBit]){
+                maximum = (1<<i) | maximum;
+                node = node->child[1-CurrentBit];
+            }
+            else{
+                node = node->child[CurrentBit];
+            }
+        }
+        return maximum;
+    }
+};
+
+int maximumXor(vector<int> nums)
+{
+    Trie *root = new Trie();
+    for(auto it:nums) root->insertNum(it);
+    int maximumXor = 0;
+    for(auto it: nums) maximumXor = max(maximumXor , root->getMaxValue(it));
+    return maximumXor;
+
+}
 

@@ -4522,4 +4522,30 @@ long countWaysToMakeChange(int *denominations, int n, int value)
     return solve(0, value , coins, dp);
 }
 
+//  minimum number of platforms 
 
+
+int calculateMinPatforms(int at[], int dt[], int n) {
+    
+    int platformsNeededCurrent = 1;
+    int maxi = 1;
+    
+    sort(at , at+n) , sort(dt, dt+n);
+    
+    int i= 1 , j = 0;
+
+    while(i<n and j <n){
+        if(at[i] <= dt[j]){
+            //  train will stay at platform at this time 
+            platformsNeededCurrent++ , i++ ;
+            maxi = max(platformsNeededCurrent , maxi);
+        }
+        else{
+            //  train will leave the station so platform is free of train 
+            platformsNeededCurrent--;
+            j++;
+        }
+    }
+    
+    return maxi;
+}

@@ -4667,4 +4667,24 @@ vector<vector<string>> partition(string &s)
 
 
 
+//  maximum sum increasing subsequence 
+#include <bits/stdc++.h> 
+int maxIncreasingDumbbellsSum(vector<int> &rack, int n)
+{
+	int maxSum = 0;
+	vector<int> arr = rack;
+	
+	for(int i=1; i<n;i++){
+		for(int j=0; j<i;j++){
+			if(arr[i] > arr[j] and arr[i] < arr[j] + rack[i]){
+				arr[i] = arr[j] + rack[i];
+			}
+		}
+	}
 
+	for(int i=0; i<n;i++){
+		maxSum = max(maxSum , arr[i]);
+	}
+
+	return maxSum;
+}

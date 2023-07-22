@@ -4592,3 +4592,38 @@ int matrixMultiplication(vector<int> &arr, int n)
     vector<vector<int>> dp(n+1, vector<int> (n+1, -1)) ;
     return solve(1,n-1,arr,dp);
 }
+
+
+//  palindrome Partitioning 2 
+
+#include <bits/stdc++.h> 
+
+bool isPalindrome(int start , int end, string s){
+    while(start<=end){
+        if(s[start]!=s[end]) return false;
+        start++ , end--;
+    }
+    return true;
+}
+
+int solve(int i, int j , string s , vector<vector<int>> &dp){
+    if(i>=j) return 0;
+    if(isPalindrome(i,j,s)) return 0;
+    if(dp[i][j] != -1) return dp[i][j];
+
+    int ans = INT_MAX;
+    for(int k = i; k<j;k++){
+        if(dp[i][k] == -1) dp[i][k] = solve(i,k,s,dp);   
+        if(dp[k+1][j] == -1) dp[k+1][j] = solve(k+1,j,s,dp);
+        ans = min(ans , dp[i][k] + dp[k+1][j] +1);
+    }
+
+    return dp[i][j] = ans;
+}
+
+int palindromePartitioning(string str) {
+    int i=0 , j = str.length()-1;
+    vector<vector<int>> dp(j+1, vector<int>(j+1,-1));
+    return solve(i,j,str,dp);
+}
+

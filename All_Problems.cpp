@@ -4490,3 +4490,36 @@ vector<vector<int>> stronglyConnectedComponents(int n, vector<vector<int>> &edge
 
 }
 
+
+
+//  ways to make coin change 
+
+#include "bits/stdc++.h"
+
+long solve(int index , int target , vector<int>coins , vector<vector<long>> &dp){
+    if(index == coins.size()){
+        if(target == 0) return 1;
+        return 0;
+    }
+    if(dp[index][target] != -1) return dp[index][target] ;
+
+    long  take = 0;
+    if(target >= coins[index]){
+        take = solve(index , target-coins[index] , coins, dp);
+    }
+
+    long notTake = solve(index +1 , target , coins , dp);
+
+    return dp[index][target] = take + notTake;
+}
+
+long countWaysToMakeChange(int *denominations, int n, int value)
+{
+    vector<vector<long>> dp(n+1, vector<long> (value+1,-1));
+    vector<int> coins;
+    for(int i=0; i<n; i++) coins.push_back(denominations[i]);
+    sort(coins.begin() , coins.end());
+    return solve(0, value , coins, dp);
+}
+
+

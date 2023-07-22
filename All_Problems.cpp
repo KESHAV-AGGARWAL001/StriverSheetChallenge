@@ -4423,3 +4423,70 @@ int maximumXor(vector<int> nums)
 
 }
 
+
+//  strongly connected components 
+
+
+#include "bits/stdc++.h"
+
+void dfsFirst(int node , vector<int> adj [] , vector<bool> &visited , stack<int> &st){
+    visited[node] = true;
+    for(auto it : adj[node]){
+        if(!visited[it]){
+            dfsFirst(it, adj, visited, st);
+        }
+    }
+    st.push(node);
+}
+
+
+void dfsSecond(int node , vector<int> adj [] , vector<bool> &visited , vector<int> &st){
+    visited[node] = true;
+    st.push_back(node);
+    for(auto it : adj[node]){
+        if(!visited[it]){
+            dfsSecond(it, adj, visited, st);
+        }
+    }
+}
+
+
+vector<vector<int>> stronglyConnectedComponents(int n, vector<vector<int>> &edges)
+{
+
+    vector<int> adj[n];
+
+    for(auto it: edges) adj[it[0]].push_back(it[1]);
+
+    vector<bool> visited(n, false);
+    stack<int> st;
+
+    for(int it = 0;it <n;it++) 
+        if(!visited[it]) dfsFirst(it, adj, visited, st);
+
+    for(int i=0; i<n;i++) adj[i].clear();
+
+
+    for(auto it: edges) adj[it[1]].push_back(it[0]);
+
+    for(int i=0; i<n;i++) visited[i] = false;
+
+    vector<vector<int>> result;
+
+    while (!st.empty())
+    {
+        int node = st.top();
+        st.pop();
+        vector<int> temp;
+        if (!visited[node])
+        {
+            dfsSecond(node,adj,visited, temp);
+        }
+        result.push_back(temp);
+    }
+
+    return result;
+
+
+}
+

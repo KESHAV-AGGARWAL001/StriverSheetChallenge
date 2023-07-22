@@ -4627,3 +4627,44 @@ int palindromePartitioning(string str) {
     return solve(i,j,str,dp);
 }
 
+
+//  palindrome Partitioning 
+//  solution is seen by mistake so no coins but I got the point that's important 
+
+
+#include <bits/stdc++.h> 
+
+bool isPalindrome(string s){
+    int start = 0 , end = s.length()-1;
+    while(start<=end){
+        if(s[start]!=s[end]) return false;
+        start++ , end--;
+    }
+    return true;
+}
+
+vector<vector<string>> ans;
+void solve(int index, vector<string>&temp , string s){
+    if(index == s.length()){
+        ans.push_back(temp);
+        return;
+    }
+    for(int i= index;i<s.length();i++){
+        if(isPalindrome(s.substr(index , i-index+1))){
+            temp.push_back(s.substr(index , i-index+1));
+            solve(i+1, temp, s);
+            temp.pop_back();
+        }
+    }
+}
+
+vector<vector<string>> partition(string &s) 
+{
+    vector<string> temp;
+    solve(0, temp,s);
+    return ans;
+}
+
+
+
+

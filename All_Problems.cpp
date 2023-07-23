@@ -4770,3 +4770,37 @@ int kruskalMST(int n, int m, vector<vector<int>> &g) {
 	return result;
 }
 
+
+//  online stock span problem 
+
+#include <bits/stdc++.h> 
+vector<int> findSpans(vector<int> &arr) {
+    int n = arr.size();
+    reverse(arr.begin() , arr.end());
+    stack<pair<int,int>> s;
+    vector<int> ans(n);
+    s.push({arr[0] , 0});
+
+    for (int i = 1; i < n; i++) {
+
+        if (s.empty()) {
+            s.push({arr[i] , i});
+            continue;
+        }
+
+        while (s.size() && s.top().first < arr[i]) {
+            ans[s.top().second] = i-s.top().second;
+            s.pop();
+        }
+
+        s.push({arr[i] , i});
+    }
+
+    while (s.size()) {
+        ans[s.top().second]  = n - s.top().second;
+        s.pop();
+    }
+    reverse(ans.begin() , ans.end());
+    return ans;
+}
+

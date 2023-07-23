@@ -4688,3 +4688,46 @@ int maxIncreasingDumbbellsSum(vector<int> &rack, int n)
 
 	return maxSum;
 }
+
+
+
+//  prim's algorithm 
+
+#include <bits/stdc++.h> 
+vector<pair<pair<int, int>, int>> calculatePrimsMST(int n, int m, vector<pair<pair<int, int>, int>> &g)
+{
+    vector<pair<int,int>> adj[n+1];
+    for(auto it : g){
+        int i = it.first.first;
+        int j = it.first.second;
+        int wt = it.second;
+        adj[i].push_back({wt,j});       
+        adj[j].push_back({wt,i});
+    }
+
+    vector<bool> vec(n+1,false);
+
+    vector< pair<pair<int,int> , int> > result;
+    
+    priority_queue< pair<int,pair<int,int>> , vector<pair<int,pair<int,int> >> , greater<pair<int,pair<int,int>> > > pq;
+    pq.push({0,{1,-1}});
+    while(pq.size()){
+        auto it =  pq.top();
+        pq.pop();
+        if(vec[it.second.first] != true){
+            vec[it.second.first] = true; 
+            if(it.second.second != -1){
+                result.push_back({{it.second.first , it.second.second},it.first});
+            }
+            for(auto m : adj[it.second.first]){
+                if(vec[m.second] == false){
+                    pq.push({m.first , {m.second , it.second.first}} );
+                }
+            }
+        }
+    }
+
+
+    return result;
+}
+

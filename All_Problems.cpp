@@ -4731,3 +4731,42 @@ vector<pair<pair<int, int>, int>> calculatePrimsMST(int n, int m, vector<pair<pa
     return result;
 }
 
+
+//  kruskal minimum spanning tree weight 
+
+#include <bits/stdc++.h> 
+int kruskalMST(int n, int m, vector<vector<int>> &g) {
+	vector<pair<int,int>> adj[n+1];
+    for(auto it : g){
+        int i = it[0];
+        int j = it[1];
+        int wt = it[2];
+        adj[i].push_back({wt,j});       
+        adj[j].push_back({wt,i});
+    }
+
+    vector<bool> vec(n+1,false);
+
+    int result;
+    
+    priority_queue< vector<int> , vector<vector<int>> , greater<vector<int>> > pq;
+    pq.push({0, 1, -1});
+    while(pq.size()){
+        auto it =  pq.top();
+        pq.pop();
+        if(vec[it[1]] != true){
+            vec[it[1]] = true; 
+            if(it[2] != -1){
+                result += it[0];
+            }
+            for(auto m : adj[it[1]]){
+                if(vec[m.second] == false){
+                    pq.push({m.first , m.second , it[1] } );
+                }
+            }
+        }
+    }
+
+	return result;
+}
+

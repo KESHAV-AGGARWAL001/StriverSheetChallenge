@@ -4804,3 +4804,41 @@ vector<int> findSpans(vector<int> &arr) {
     return ans;
 }
 
+
+//  the celebrity problem 
+
+#include <bits/stdc++.h> 
+/*
+	This is signature of helper function 'knows'.
+	You should not implement it, or speculate about its implementation.
+
+	bool knows(int A, int B); 
+	Function 'knows(A, B)' will returns "true" if the person having
+	id 'A' know the person having id 'B' in the party, "false" otherwise.
+*/
+
+int findCelebrity(int n) {
+ 	int MainCelebrity = 0 , index = 1;
+	 while(MainCelebrity < n and index < n){
+		 if(knows(MainCelebrity, index)){
+			 MainCelebrity = index ;
+			 index++;
+		 }
+		 else{
+			 if(knows(index , MainCelebrity)) index++;
+			 else{
+				 MainCelebrity = index , index++;
+			 }
+		 }
+	 }
+
+	 if(MainCelebrity == n ) return -1;
+
+	//   check for others 
+
+	for(int i=0; i<n;i++){
+		if(i!=MainCelebrity and (!knows(i, MainCelebrity) or knows(MainCelebrity , i))) return -1;
+	}
+
+	return MainCelebrity;
+}

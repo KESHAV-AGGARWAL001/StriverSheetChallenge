@@ -4896,3 +4896,72 @@ string graphColoring(vector<vector<int>> &mat, int m) {
 
 }
 
+
+// maximum xor of two values from array including condition 
+
+#include "bits/stdc++.h"
+
+class Trie{
+public:
+    Trie* child[2];
+    Trie(){
+        this->child[0] = this->child[1] = 0;
+    }    
+};
+
+Trie* root;
+
+    void insert(int num){
+        Trie* temp = root;
+        bitset<32> b(num);
+        for(int i=31; i>= 0 ;i--){
+            if(temp->child[b[i]] == NULL)
+                temp->child[b[i]] = new Trie();
+            temp = temp->child[b[i]];
+        }
+    }
+
+    int maximum(int num){
+        Trie* temp = root;
+        bitset<32> b(num);
+        int result = 0;
+        for(int i=31; i>=0;i--){
+            if(temp->child[!b[i]])
+                result += (1<<i) , temp = temp->child[!b[i]];
+            else 
+                temp = temp->child[b[i]];
+        }
+
+        return result;
+    }
+vector<int> maxXorQueries(vector<int> &nums, vector<vector<int>> &queries){
+	 vector<pair<pair<int,int> , int>> q;
+        int count = 0;
+        for(auto it: queries)
+            q.push_back({{it[0],it[1]}, count++});
+
+        sort(q.begin(), q.end(), [](pair<pair<int, int>, int> &a, pair<pair<int, int>, int> &b){
+            return a.first.second < b.first.second;
+        });
+
+        sort(nums.begin() , nums.end());
+
+        vector<int> ans(q.size() , -1);
+
+        root = new Trie();
+
+        int index = 0;
+
+        for(int i=0; i<q.size() ;i++){
+            int value = q[i].first.first , limit = q[i].first.second , ptr = q[i].second;
+
+            while(index < nums.size() and nums[index] <= limit)
+                insert(nums[index++]);
+
+            if(index) ans[ptr] = maximum(value);
+        }
+
+        return ans;
+
+}
+

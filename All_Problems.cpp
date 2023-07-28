@@ -4842,3 +4842,57 @@ int findCelebrity(int n) {
 
 	return MainCelebrity;
 }
+
+
+//  m-coloring problem 
+// solved using breadth first search 
+
+#include "bits/stdc++.h"
+
+string graphColoring(vector<vector<int>> &mat, int m) {
+    // using bfs for finding graph colouring is possible or not 
+
+    vector<int> adj[mat.size()+1];
+
+    for(int i=0; i<mat.size();i++){
+        for(int j=0;j<mat.size();j++){
+            if(mat[i][j]) {
+                adj[i+1].push_back(j+1);                
+                adj[j+1].push_back(i+1);
+            }
+        }
+    }
+
+    vector<int> color(mat.size()+1 , 1);
+
+    vector<bool> visited (mat.size()+1 , false);
+    int maxColors = 1;
+
+    for(int node = 1; node<= mat.size(); node++){
+        if(visited[node]) continue;
+
+        visited[node] = true;
+        queue<int> q;
+        q.push(node);
+
+        while(q.size()){
+            int top = q.front();
+            q.pop();
+
+            for(auto it : adj[top]){
+                if(color[it] == color[top]){
+                    color[it]++;
+                }
+                maxColors = max({maxColors , color[top] , color[it]});
+
+                if(maxColors > m) return "NO";
+
+                if(!visited[it] ) visited[it] = true , q.push(it);
+            }
+        }
+    }
+
+    return "YES";
+
+}
+

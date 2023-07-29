@@ -4997,3 +4997,36 @@ int cutLogs(int k, int n)
 }
 
 
+//  allocate books - a binary search problem 
+
+#include <bits/stdc++.h> 
+
+bool isValid(long long int distance, vector<int>pos , int n , int c){
+    int player = 1 ;
+    long long last_pos = pos[0];
+
+    for(int i=0; i<n;i++){
+        if(pos[i] - last_pos >= distance){
+            last_pos = pos[i] , player++;
+        }
+        if(player == c) return true;
+    }
+    return false;
+}
+
+int chessTournament(vector<int> pos , int n ,  int c){
+	sort(pos.begin() , pos.end());
+
+    long long int start = 0 , end = pos.back() - pos[0];
+    int ans = -1;
+    while(start <= end){
+        long long int mid = (start) + (end - start) / 2;
+        if(isValid(mid, pos, n ,c)){
+            start = mid+1 , ans = mid;
+        }
+        else end = mid-1;
+    }
+    return ans;
+}
+
+

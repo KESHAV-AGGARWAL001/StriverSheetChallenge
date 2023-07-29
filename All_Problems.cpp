@@ -5095,6 +5095,39 @@ public:
     }
 };
 
+//  allocate books 
 
+#include <bits/stdc++.h> 
+long long ayushGivesNinjatest(int n, int m, vector<int> time) 
+{	
+	long long temp = INT_MIN;
+	for(int i=0; i<m;i++){
+		temp = max(temp , (long long) time[i]);
+	}
+
+	long long low = temp , high = 1e18 , result = 1e18;
+
+	while(low <= high){
+		long long mid = (high + low)/2;
+		long long curr = 1 , total = 0;
+		for(int i=0 ; i<m;i++){
+			if(total + time[i] > mid){
+				total = 0 , curr++;
+			}
+			total += time[i];
+		}
+
+		if(curr > n){
+			low = mid+1;
+		}
+		else{
+			result = min(result , mid);
+			high = mid-1;
+		}
+	}
+
+	return result;
+
+}
 
 

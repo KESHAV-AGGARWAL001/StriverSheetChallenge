@@ -4965,3 +4965,35 @@ vector<int> maxXorQueries(vector<int> &nums, vector<vector<int>> &queries){
 
 }
 
+
+//  cut logs problem - dynamic programming 
+
+#include "bits/stdc++.h"
+
+int solve(int start , int end , vector<vector<int>> &dp){
+    if(end <= 1 or start == 1) return end;
+
+    int ans = INT_MAX;
+    int temp_start = 1 , temp_end = end;
+    while(temp_start <= temp_end){
+        int mid = (temp_end + temp_start)/2;
+
+        int left = dp[start-1][mid-1] != -1 ? dp[start-1][mid-1] : solve(start-1, mid-1, dp);
+        int right = dp[start][end-mid] != -1 ? dp[start][end-mid] : solve(start, end-mid ,dp);  
+        ans = min(ans, 1+max(left,right));
+
+        if(left < right) temp_start = mid+1;
+        else temp_end = mid-1;
+    }
+
+    return dp[start][end] = ans;
+
+}
+
+int cutLogs(int k, int n)
+{
+    vector<vector<int>> dp(k+1, vector<int> (n+1, -1));
+    return solve(k,n,dp);
+}
+
+

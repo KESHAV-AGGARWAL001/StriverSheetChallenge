@@ -5030,3 +5030,71 @@ int chessTournament(vector<int> pos , int n ,  int c){
 }
 
 
+//  lfu cache - best problem 
+
+#include <bits/stdc++.h> 
+class LFUCache
+{
+    int capacity , miniFreq;
+    unordered_map<int, pair<int,int>> cache;
+    unordered_map<int , list<int>> freqlist;
+    unordered_map<int , list<int> :: iterator > position;
+public:
+    LFUCache(int capacity)
+    {
+        this->capacity = capacity , miniFreq = 0;
+    }
+
+    int get(int key)
+    {
+        if(cache.find(key) != cache.end()){
+            int freq = cache[key].second;
+            freqlist[freq].erase(position[key]);
+            freq++;
+
+            freqlist[freq].push_front(key);
+            position[key] = freqlist[freq].begin();
+            
+            if(freqlist[miniFreq].size() == 0) miniFreq++;
+
+            return cache[key].first;
+        }
+        return -1;
+    }
+
+    void put(int key, int value)
+    {
+        if(cache.find(key) != cache.end()){
+            cache[key].first = value;
+            int freq = cache[key].second;
+            
+            freqlist[freq].erase(position[key]);
+            freq++;
+
+            freqlist[freq].push_front(key);
+            position[key] = freqlist[freq].begin();
+            
+            if(freqlist[miniFreq].empty()) miniFreq++;
+            return;
+        }
+
+        //  case of lru 
+
+        if(capacity == cache.size()){
+            int key = freqlist[miniFreq].back();
+            cache.erase(key);
+            position.erase(key);
+            freqlist[miniFreq].pop_front();
+        }
+
+
+        cache[key] = {value, 1};
+        freqlist[1].push_front(key);
+        position[key] = freqlist[1].begin();
+        miniFreq =1;
+    }
+};
+
+
+
+

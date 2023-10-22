@@ -1773,6 +1773,10 @@ public:
 //  implement trie best method 
 
 class Trie {
+private:
+    bool is_leaf;
+    Trie* children[26];
+    };
     public:
         Trie() {
             this->is_leaf = false;
@@ -1793,9 +1797,7 @@ class Trie {
             root->is_leaf = true;
         }
         
-    bool is_leaf;
-    Trie* children[26];
-    };
+    
     
     Trie trie;
     vector<char> queries;

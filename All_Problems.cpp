@@ -1770,6 +1770,38 @@ public:
     }
 };
 
+//  implement trie best method 
+
+class Trie {
+    public:
+        Trie() {
+            this->is_leaf = false;
+            for(int i=0;i<26;i++)
+                this->children[i] = NULL;
+        }
+        
+        void insert_reversed(string word) {
+            reverse(word.begin(), word.end());
+            Trie* root = this;
+            for(int i=0;i<word.length();i++)
+            {
+                int index = word[i] - 'a';
+                if (root->children[index] == NULL)
+                    root->children[index] = new Trie();
+                root = root->children[index];
+            }
+            root->is_leaf = true;
+        }
+        
+    bool is_leaf;
+    Trie* children[26];
+    };
+    
+    Trie trie;
+    vector<char> queries;
+    int longest_word=0;
+};
+
 //  implement trie 2
 #include <bits/stdc++.h> 
 

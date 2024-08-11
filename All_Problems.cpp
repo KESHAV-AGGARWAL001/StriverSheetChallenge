@@ -112,11 +112,6 @@ string fourSum(vector<int> nums, int target, int n) {
 }
 
 //  next permutation lexicographically smallest
-
-
-#include <bits/stdc++.h>
-using namespace std;
-
 vector<int> nextGreaterPermutation(vector<int> &A) {
     int n = A.size(); // size of the array.
 
@@ -152,20 +147,6 @@ vector<int> nextGreaterPermutation(vector<int> &A) {
 
     return A;
 }
-
-int main()
-{
-    vector<int> A = {2, 1, 5, 4, 3, 0, 0};
-    vector<int> ans = nextGreaterPermutation(A);
-
-    cout << "The next permutation is: [";
-    for (auto it : ans) {
-        cout << it << " ";
-    }
-    cout << "]n";
-    return 0;
-}
-
 
 
 // previous lexicographically permutation

@@ -150,36 +150,34 @@ vector<int> nextGreaterPermutation(vector<int> &A) {
 
 
 // previous lexicographically permutation
-class Solution {
-  public:
-    string prevPermutation(string s) {
 // Find largest index i such that str[i – 1] > str[i].
 // Find largest index j such that j >= i and str[j] < str[i – 1].
 // Swap str[j] and str[i – 1].
 // Reverse the sub-array starting at str[i].
-        int n = s.length();
-        int index = -1;
-        for(int i=n-2; i>=0; i--){
-            if(s[i] > s[i+1]){
-                index = i;
-                break;
-            }
-        }
-        
-        if(index == 0){
-            return "None";
-        }
-        
-        for(int j=n-1; j>=0 ; j--){
-            if(s[j] < s[index]){
-                swap(s[index] , s[j]);
-                reverse(s.begin()+index+1, s.end());
-                break;
-            }
-        }
-        return s;
+
+string prevPermutation(string s) {
+int index = -1;
+int n = s.length();
+for(int i=n-2; i>=0; i--){
+    if(s[i] > s[i+1]){
+	index = i;
+	break;
     }
-};
+}
+
+if(index == 0){
+    return "None";
+}
+
+for(int j=n-1; j>=0 ; j--){
+    if(s[j] < s[index]){
+	swap(s[index] , s[j]);
+	reverse(s.begin()+index+1, s.end());
+	break;
+    }
+}
+return s;
+}
 
 //  longest consecutive sequence 
 #include <bits/stdc++.h>

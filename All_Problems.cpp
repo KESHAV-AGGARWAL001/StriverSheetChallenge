@@ -172,10 +172,10 @@ if(index == 0){
 for(int j=n-1; j>=0 ; j--){
     if(s[j] < s[index]){
 	swap(s[index] , s[j]);
-	reverse(s.begin()+index+1, s.end());
 	break;
     }
 }
+reverse(s.begin()+index+1, s.end());
 return s;
 }
 

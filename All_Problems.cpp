@@ -406,6 +406,7 @@ void deleteNode(LinkedListNode<int> * node) {
 
 // cycle detection in ll
 
+// Floyd-cycle detection algo / this can be done by using hashset of all the elements in a list , if we get the same element again while traversing ,that means we have a cycle in the linked list 
 bool detectCycle(Node *head)
 {
 	Node *slow = head, *fast = head;
@@ -548,6 +549,7 @@ int longestSubSeg(vector<int> &nums , int n, int k){
     }
     return i-j;
 }
+
 //  maximum meetings 
 #include <bits/stdc++.h> 
 vector<int> maximumMeetings(vector<int> &start, vector<int> &end) {
@@ -776,7 +778,7 @@ vector<string> findPermutations(string &s) {
 // valid sudoku 
 bool isValid(int board[9][9], int row, int col , int c){
     for(int i=0; i<9;i++){
-    if(board[i][col] == c or board[row][i] == c or board[3*(row/3)+(i/3)][3*(col/3)+(i%3)] == c) return false;
+   	 if(board[i][col] == c or board[row][i] == c or board[3*(row/3)+(i/3)][3*(col/3)+(i%3)] == c) return false;
     }
     return true;
 }
@@ -1302,8 +1304,6 @@ public:
 
 
 
-// stack implement 
-#include <bits/stdc++.h> 
 // Stack class.
 class Stack {
     vector<int> ans;
